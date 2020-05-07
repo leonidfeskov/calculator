@@ -1,62 +1,86 @@
-import { dateFormat, calcPercent } from './common';
+import { getNextMonth, getDaysCountInYear, getDaysCountBetweenDates } from './date';
 
 
 const MAX_MONTHS_COUNT = 360;
+const startDate = new Date();
 
-export default function calculatePayments({ creditSum, creditPercent, paymentPerMonth }) {
-    // заполняем начальные значения
-    const data = [];
-    const nowDate = new Date();
-
-    const initialRow = {
-        number: 1,
-        date: dateFormat(nowDate),
-        payment: creditSum > paymentPerMonth ? paymentPerMonth : creditSum,
-        credit: creditSum,
-        creditRepayment: 0,
+function calculateOnePayment(previousRow, payment, percentage) {
+    const currentRow = {
+        number: previousRow.number + 1,
+        date: getNextMonth(previousRow.date),
+        payment,
     };
 
-    initialRow.creditDebt = calcPercent(initialRow.credit, creditPercent, nowDate);
-    initialRow.overpayment = initialRow.creditDebt;
-    initialRow.creditRepayment = initialRow.payment - initialRow.creditDebt;
+    const daysCountInPreviousYear = getDaysCountInYear(previousRow.date.getFullYear());
+    const daysCountInCurrentYear = getDaysCountInYear(currentRow.date.getFullYear());
+    let paymentByPercents = 0;
+    // Случай, когда платежный месяц выпадает на границу високосного и невисокоснова годов
+    // В таком случае стоимость одного дня для платежного месяца рассчитывается по разному
+    if (
+        previousRow.date.getMonth() === 11 &&
+        daysCountInPreviousYear !== daysCountInCurrentYear
+    ) {
+        const daysCountInPreviousMonth = getDaysCountBetweenDates(
+            previousRow.date, new Date(`${previousRow.date.getFullYear()}-12-31`)
+        );
+        const daysCountInCurrentMonth = getDaysCountBetweenDates(
+            new Date(`${currentRow.date.getFullYear()}-01-01`), currentRow.date,
+        ) + 1;
 
-    data.push(initialRow);
+        const oneDayCreditCostForPreviousMonth = previousRow.creditLeft * percentage / daysCountInPreviousYear;
+        const oneDayCreditCostForCurrentMonth = previousRow.creditLeft * percentage / daysCountInCurrentYear;
 
-    // заполняем остальные значения на основе начальных и данных от пользователя
-    let rowIndex = 1;
-    let prevRow = data[rowIndex - 1];
-    while ((prevRow.credit + prevRow.creditDebt) > paymentPerMonth) {
-        const nextMonthDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + rowIndex, nowDate.getDate());
+        paymentByPercents = oneDayCreditCostForPreviousMonth * daysCountInPreviousMonth + oneDayCreditCostForCurrentMonth * daysCountInCurrentMonth
+    } else {
+        // обычный случай
+        const oneDayCreditCost = previousRow.creditLeft * percentage / daysCountInPreviousYear;
+        paymentByPercents = oneDayCreditCost * getDaysCountBetweenDates(previousRow.date, currentRow.date);
+    }
 
-        const row = {
-            number: rowIndex + 1,
-            date: dateFormat(nextMonthDate),
-            credit: prevRow.credit - prevRow.creditRepayment,
-        };
+    // последний платежный месяц
+    if (previousRow.creditLeft <= payment) {
+        currentRow.payment = previousRow.creditLeft + paymentByPercents;
+    }
 
-        row.creditDebt = calcPercent(row.credit, creditPercent, nextMonthDate);
-        row.overpayment = prevRow.overpayment + row.creditDebt;
+    const paymentByCredit = currentRow.payment - paymentByPercents;
 
-        const creditWithPercents = row.credit + row.creditDebt;
+    currentRow['paymentByPercents'] = paymentByPercents;
+    currentRow['paymentByCredit'] = paymentByCredit;
+    currentRow['overpayment'] = previousRow.overpayment + paymentByPercents;
+    currentRow['creditLeft'] = previousRow.creditLeft - paymentByCredit;
 
-        row.payment = creditWithPercents > paymentPerMonth ? paymentPerMonth : creditWithPercents;
+    return currentRow;
+}
 
-        row.creditRepayment = row.payment - row.creditDebt;
+export default function calculatePayments({creditSum, creditPercent, paymentPerMonth}) {
+    const paymentSchedule = [];
+    const percentage = creditPercent / 100;
 
-        data.push(row);
-        prevRow = data[rowIndex];
-        rowIndex++;
+    paymentSchedule[0] = {
+        number: 0,
+        date: startDate,
+        payment: 0,
+        paymentByPercents: 0,
+        paymentByCredit: 0,
+        overpayment: 0,
+        creditLeft: creditSum,
+    };
 
-        if (rowIndex > MAX_MONTHS_COUNT) {
-            break;
-        }
+    let creditLeft = creditSum;
+    let monthCount = 0;
+
+    while (paymentSchedule.length < MAX_MONTHS_COUNT && creditLeft > 0) {
+        const nextPayment = calculateOnePayment(paymentSchedule[monthCount], paymentPerMonth, percentage);
+        paymentSchedule.push(nextPayment);
+        creditLeft = nextPayment.creditLeft;
+        monthCount++;
     }
 
     return {
-        dataByMonths: data,
+        dataByMonths: paymentSchedule,
         summary: {
-            overpayment: data[data.length - 1].overpayment,
-            monthCount: data.length,
+            overpayment: paymentSchedule[paymentSchedule.length - 1].overpayment,
+            monthCount: paymentSchedule.length,
         }
     };
 }
