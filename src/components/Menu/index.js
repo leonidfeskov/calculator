@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import clsx from "clsx";
 import {makeStyles} from "@material-ui/core/styles";
 import MuiIconButton from "@material-ui/core/IconButton";
@@ -61,13 +62,13 @@ export default function Menu({ handleDrawerClose, isOpenMenu }) {
             </div>
             <MuiDivider />
             <MuiList>
-                <MuiListItem button>
+                <MuiListItem button component={Link} to="/">
                     <MuiListItemIcon>
                         <MuiDashboardIcon />
                     </MuiListItemIcon>
                     <MuiListItemText primary="Кредитный калькулятор" />
                 </MuiListItem>
-                <MuiListItem button>
+                <MuiListItem button component={Link} to="/saved-credits">
                     <MuiListItemIcon>
                         <MuiBookmarksIcon />
                     </MuiListItemIcon>

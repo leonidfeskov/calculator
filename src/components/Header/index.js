@@ -1,11 +1,13 @@
-import React from "react";
-import clsx from "clsx";
-import MuiToolbar from "@material-ui/core/Toolbar";
-import MuiIconButton from "@material-ui/core/IconButton";
-import MuiMenuIcon from "@material-ui/icons/Menu";
-import MuiTypography from "@material-ui/core/Typography";
-import MuiAppBar from "@material-ui/core/AppBar/AppBar";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import clsx from 'clsx';
+import MuiToolbar from '@material-ui/core/Toolbar';
+import MuiIconButton from '@material-ui/core/IconButton';
+import MuiMenuIcon from '@material-ui/icons/Menu';
+import MuiTypography from '@material-ui/core/Typography';
+import MuiAppBar from '@material-ui/core/AppBar/AppBar';
+import { makeStyles } from '@material-ui/core/styles';
+import routes from '../../routes';
 
 const drawerWidth = 300;
 
@@ -42,18 +44,24 @@ const useStyles = makeStyles((theme) => ({
 export default function Header({ handleDrawerOpen, isOpenMenu }) {
     const classes = useStyles();
     return (
-        <MuiAppBar position="absolute" className={clsx(classes.appBar, isOpenMenu && classes.appBarShift)}>
+        <MuiAppBar position='absolute' className={clsx(classes.appBar, isOpenMenu && classes.appBarShift)}>
             <MuiToolbar className={classes.toolbar}>
                 <MuiIconButton
-                    edge="start"
-                    color="inherit"
+                    edge='start'
+                    color='inherit'
                     onClick={handleDrawerOpen}
                     className={clsx(classes.menuButton, isOpenMenu && classes.menuButtonHidden)}
                 >
                     <MuiMenuIcon />
                 </MuiIconButton>
-                <MuiTypography component="h1" variant="h5" color="inherit" noWrap className={classes.title}>
-                    Кредитный калькулятор
+                <MuiTypography component='h1' variant='h5' color='inherit' noWrap className={classes.title}>
+                    <Switch>
+                        {routes.map((route, index) => (
+                            <Route key={index} path={route.path} exact>
+                                {route.title}
+                            </Route>
+                        ))}
+                    </Switch>
                 </MuiTypography>
             </MuiToolbar>
         </MuiAppBar>

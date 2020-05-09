@@ -1,16 +1,16 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import MuiCssBaseline from '@material-ui/core/CssBaseline';
 import MuiContainer from '@material-ui/core/Container';
-import MuiGrid from '@material-ui/core/Grid';
 
 import Header from './components/Header';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import CreditForm from './components/CreditForm';
-import SummaryMonthCount from './components/SummaryMonthCount';
-import SummaryOverpayment from './components/SummaryOverpayment';
-import PaymentSchedule from './components/PaymentSchedule';
+
+
+import routes from './routes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,35 +39,27 @@ export default function Dashboard() {
   };
 
   return (
-      <div className={classes.root}>
-        <MuiCssBaseline />
-        <Header isOpenMenu={openMenu} handleDrawerOpen={handleDrawerOpen} />
-        <Menu isOpenMenu={openMenu} handleDrawerClose={handleDrawerClose} />
+      <Router>
+        <div className={classes.root}>
+          <MuiCssBaseline />
+          <Header isOpenMenu={openMenu} handleDrawerOpen={handleDrawerOpen} />
+          <Menu isOpenMenu={openMenu} handleDrawerClose={handleDrawerClose} />
 
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <MuiContainer maxWidth="lg" className={classes.container}>
-            <MuiGrid container spacing={4}>
-              <MuiGrid item xs={12} md={12} lg={12}>
-                <CreditForm />
-              </MuiGrid>
-            </MuiGrid>
-            <MuiGrid container spacing={4}>
-              <MuiGrid item xs={12} md={6} lg={6}>
-                <SummaryMonthCount />
-              </MuiGrid>
-              <MuiGrid item xs={12} md={6} lg={6}>
-                <SummaryOverpayment />
-              </MuiGrid>
-            </MuiGrid>
-            <MuiGrid container spacing={4}>
-              <MuiGrid item xs={12}>
-                <PaymentSchedule />
-              </MuiGrid>
-            </MuiGrid>
-            <Footer />
-          </MuiContainer>
-        </main>
-      </div>
-  );
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <MuiContainer maxWidth="lg" className={classes.container}>
+              <Switch>
+                {routes.map((route, index) => (
+                    <Route key={index} path={route.path} exact>
+                      {route.component}
+                    </Route>
+                ))}
+              </Switch>
+              <Footer />
+            </MuiContainer>
+          </main>
+        </div>
+      </Router>
+
+  )
 }
