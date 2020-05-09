@@ -1,7 +1,17 @@
-import { getNextMonth, getDaysCountInYear, getDaysCountBetweenDates } from 'src/utils/date';
+import { getNextMonth, getDaysCountInYear, getDaysCountBetweenDates, formatDate } from 'src/utils/date';
+import { roundValue } from 'src/utils/common';
 
 const MAX_MONTHS_COUNT = 360;
 const startDate = new Date();
+
+function addFormattedFields(row) {
+    row.dateFormatted = formatDate(row.date);
+    row.paymentRounded = roundValue(row.payment);
+    row.paymentByPercentsRounded = roundValue(row.paymentByPercents);
+    row.paymentByCreditRounded = roundValue(row.paymentByCredit);
+    row.overpaymentRounded = roundValue(row.overpayment);
+    row.creditLeftRounded = roundValue(row.creditLeft);
+}
 
 function calculateOnePayment(previousRow, payment, percentage) {
     const currentRow = {
@@ -47,6 +57,8 @@ function calculateOnePayment(previousRow, payment, percentage) {
     currentRow.overpayment = previousRow.overpayment + paymentByPercents;
     currentRow.creditLeft = previousRow.creditLeft - paymentByCredit;
 
+    addFormattedFields(currentRow);
+
     return currentRow;
 }
 
@@ -63,6 +75,8 @@ export default function calculatePayments({ creditSum, creditPercent, paymentPer
         overpayment: 0,
         creditLeft: creditSum,
     };
+
+    addFormattedFields(paymentSchedule[0]);
 
     let creditLeft = creditSum;
     let monthCount = 0;

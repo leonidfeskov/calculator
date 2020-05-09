@@ -1,9 +1,12 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { TextField, Button, Grid } from '@material-ui/core';
+import { Form, Field } from 'react-final-form';
+import MuiButton from '@material-ui/core/Button';
+import MuiGrid from '@material-ui/core/Grid';
 
 import Box from 'src/components/common/Box';
 import BoxTitle from 'src/components/common/Box/Title';
+import Input from 'src/components/common/Input';
 import { setCreditParams } from 'src/reducers/creditParams';
 import { setPaymentSchedule } from 'src/reducers/paymentSchedule';
 import calculatePayments from 'src/utils/calculatePayments';
@@ -11,13 +14,11 @@ import calculatePayments from 'src/utils/calculatePayments';
 export default function CreditForm() {
     const { creditParams } = useSelector((state) => state);
     const dispatch = useDispatch();
-    const formRef = useRef();
 
-    const onButtonClick = () => {
-        const elements = formRef.current.elements;
-        const creditSum = parseFloat(elements.creditSum.value);
-        const creditPercent = parseFloat(elements.creditPercent.value);
-        const paymentPerMonth = parseFloat(elements.paymentPerMonth.value);
+    const onSubmit = (values) => {
+        const creditSum = parseFloat(values.creditSum);
+        const creditPercent = parseFloat(values.creditPercent);
+        const paymentPerMonth = parseFloat(values.paymentPerMonth);
         dispatch(
             setCreditParams({
                 creditSum,
@@ -25,7 +26,6 @@ export default function CreditForm() {
                 paymentPerMonth,
             })
         );
-
         const paymentSchedule = calculatePayments({ creditSum, creditPercent, paymentPerMonth });
         dispatch(setPaymentSchedule(paymentSchedule));
     };
@@ -33,45 +33,36 @@ export default function CreditForm() {
     return (
         <Box>
             <BoxTitle>Параметры кредита</BoxTitle>
-            <form noValidate autoComplete="off" ref={formRef}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <TextField
-                            label="Сумма кредита"
-                            name="creditSum"
-                            defaultValue={creditParams.creditSum}
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <TextField
-                            label="Процентная ставка"
-                            name="creditPercent"
-                            defaultValue={creditParams.creditPercent}
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <TextField
-                            label="Ежемесячный платеж"
-                            name="paymentPerMonth"
-                            defaultValue={creditParams.paymentPerMonth}
-                            variant="outlined"
-                            size="small"
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <Button variant="contained" color="primary" fullWidth onClick={onButtonClick}>
-                            Рассчитать
-                        </Button>
-                    </Grid>
-                </Grid>
-            </form>
+            <Form
+                onSubmit={onSubmit}
+                initialValues={creditParams}
+                render={({ handleSubmit }) => (
+                    <form onSubmit={handleSubmit} noValidate autoComplete="off">
+                        <MuiGrid container spacing={3}>
+                            <MuiGrid item xs={12} md={3} lg={3}>
+                                <Field name="creditSum">
+                                    {({ input }) => <Input {...input} label="Сумма кредита" />}
+                                </Field>
+                            </MuiGrid>
+                            <MuiGrid item xs={12} md={3} lg={3}>
+                                <Field name="creditPercent">
+                                    {({ input }) => <Input {...input} label="Процентная ставка" />}
+                                </Field>
+                            </MuiGrid>
+                            <MuiGrid item xs={12} md={3} lg={3}>
+                                <Field name="paymentPerMonth">
+                                    {({ input }) => <Input {...input} label="Ежемесячный платеж" />}
+                                </Field>
+                            </MuiGrid>
+                            <MuiGrid item xs={12} md={3} lg={3}>
+                                <MuiButton variant="contained" color="primary" fullWidth type="submit">
+                                    Рассчитать
+                                </MuiButton>
+                            </MuiGrid>
+                        </MuiGrid>
+                    </form>
+                )}
+            />
         </Box>
     );
 }
