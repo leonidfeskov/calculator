@@ -7,6 +7,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(2),
         marginBottom: theme.spacing(4),
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
     },
 }));
 

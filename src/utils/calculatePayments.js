@@ -76,11 +76,15 @@ export default function calculatePayments({creditSum, creditPercent, paymentPerM
         monthCount++;
     }
 
+    const lastRow = paymentSchedule[paymentSchedule.length - 1];
+
     return {
         dataByMonths: paymentSchedule,
         summary: {
-            overpayment: paymentSchedule[paymentSchedule.length - 1].overpayment,
+            overpayment: lastRow.overpayment,
+            overpaymentPercent: Math.round(lastRow.overpayment / creditSum * 100),
             monthCount: paymentSchedule.length,
+            lastPaymentDate: lastRow.date,
         }
     };
 }

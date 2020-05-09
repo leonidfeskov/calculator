@@ -11,7 +11,10 @@ export default function SummaryOverpayment() {
         <Summary
             title="Переплата"
             icon={<MuiAttachMoneyIcon fontSize="large" />}
-            value={`${priceFormat(summary.overpayment)} руб.`}
+            value={`${priceFormat(summary.overpayment)}`}
+            units="руб."
+            footer={`Это ${summary.overpaymentPercent}% от суммы кредита`}
+            iconType="warning"
         />
     );
 }
