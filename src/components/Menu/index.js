@@ -10,9 +10,9 @@ import MuiList from "@material-ui/core/List";
 import MuiDrawer from "@material-ui/core/Drawer/Drawer";
 import MuiListItem from "@material-ui/core/ListItem";
 import MuiListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
-import MuiDashboardIcon from "@material-ui/icons/Dashboard";
-import MuiBookmarksIcon from "@material-ui/icons/Bookmarks";
 import MuiListItemText from "@material-ui/core/ListItemText/ListItemText";
+
+import routes from "../../routes";
 
 const drawerWidth = 300;
 
@@ -78,18 +78,14 @@ export default function Menu() {
             </div>
             <MuiDivider />
             <MuiList>
-                <MuiListItem button component={Link} to="/">
-                    <MuiListItemIcon>
-                        <MuiDashboardIcon />
-                    </MuiListItemIcon>
-                    <MuiListItemText primary="Кредитный калькулятор" />
-                </MuiListItem>
-                <MuiListItem button component={Link} to="/saved-credits">
-                    <MuiListItemIcon>
-                        <MuiBookmarksIcon />
-                    </MuiListItemIcon>
-                    <MuiListItemText primary="Сохраненные кредиты" />
-                </MuiListItem>
+                {routes.map((route, index) => (
+                    <MuiListItem key={index} button component={Link} to={route.path}>
+                        <MuiListItemIcon>
+                            {route.menuIcon}
+                        </MuiListItemIcon>
+                        <MuiListItemText primary={route.title} />
+                    </MuiListItem>
+                ))}
             </MuiList>
         </MuiDrawer>
     )
