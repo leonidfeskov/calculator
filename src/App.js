@@ -16,11 +16,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -30,34 +27,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [openMenu, setOpenMenu] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpenMenu(true);
-  };
-  const handleDrawerClose = () => {
-    setOpenMenu(false);
-  };
 
   return (
       <Router>
         <div className={classes.root}>
           <MuiCssBaseline />
-          <Header isOpenMenu={openMenu} handleDrawerOpen={handleDrawerOpen} />
-          <Menu isOpenMenu={openMenu} handleDrawerClose={handleDrawerClose} />
-
-          <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
-            <MuiContainer maxWidth="lg" className={classes.container}>
-              <Switch>
-                {routes.map((route, index) => (
-                    <Route key={index} path={route.path} exact>
-                      {route.component}
-                    </Route>
-                ))}
-              </Switch>
-              <Footer />
-            </MuiContainer>
-          </main>
+          <Menu />
+          <div className={classes.content}>
+            <Header />
+            <main className={classes.content}>
+              <MuiContainer maxWidth="lg" className={classes.container}>
+                <Switch>
+                  {routes.map((route, index) => (
+                      <Route key={index} path={route.path} exact>
+                        {route.component}
+                      </Route>
+                  ))}
+                </Switch>
+                <Footer />
+              </MuiContainer>
+            </main>
+          </div>
         </div>
       </Router>
 

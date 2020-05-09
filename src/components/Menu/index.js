@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import clsx from "clsx";
 import {makeStyles} from "@material-ui/core/styles";
 import MuiIconButton from "@material-ui/core/IconButton";
 import MuiChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import MuiMenuIcon from '@material-ui/icons/Menu';
 import MuiDivider from "@material-ui/core/Divider";
 import MuiList from "@material-ui/core/List";
 import MuiDrawer from "@material-ui/core/Drawer/Drawer";
@@ -45,20 +46,35 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Menu({ handleDrawerClose, isOpenMenu }) {
+export default function Menu() {
     const classes = useStyles();
+
+    const [open, setOpen] = useState(true);
+    const handleMenuOpen = () => {
+        setOpen(true);
+    };
+    const handleMenuClose = () => {
+        setOpen(false);
+    };
+
     return (
         <MuiDrawer
             variant="permanent"
             classes={{
-                paper: clsx(classes.drawerPaper, !isOpenMenu && classes.drawerPaperClose),
+                paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
             }}
-            open={isOpenMenu}
+            open={open}
         >
             <div className={classes.toolbarIcon}>
-                <MuiIconButton onClick={handleDrawerClose}>
-                    <MuiChevronLeftIcon />
-                </MuiIconButton>
+                {open ? (
+                    <MuiIconButton onClick={handleMenuClose}>
+                        <MuiChevronLeftIcon />
+                    </MuiIconButton>
+                ) : (
+                    <MuiIconButton onClick={handleMenuOpen}>
+                        <MuiMenuIcon />
+                    </MuiIconButton>
+                )}
             </div>
             <MuiDivider />
             <MuiList>
