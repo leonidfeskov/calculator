@@ -1,11 +1,11 @@
-import React from "react";
-import clsx from "clsx";
-import MuiToolbar from "@material-ui/core/Toolbar";
-import MuiIconButton from "@material-ui/core/IconButton";
-import MuiMenuIcon from "@material-ui/icons/Menu";
-import MuiTypography from "@material-ui/core/Typography";
-import MuiAppBar from "@material-ui/core/AppBar/AppBar";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import clsx from 'clsx';
+import MuiToolbar from '@material-ui/core/Toolbar';
+import MuiIconButton from '@material-ui/core/IconButton';
+import MuiMenuIcon from '@material-ui/icons/Menu';
+import MuiTypography from '@material-ui/core/Typography';
+import MuiAppBar from '@material-ui/core/AppBar/AppBar';
+import { makeStyles } from '@material-ui/core/styles';
 
 const drawerWidth = 300;
 
@@ -57,5 +57,5 @@ export default function Header({ handleDrawerOpen, isOpenMenu }) {
                 </MuiTypography>
             </MuiToolbar>
         </MuiAppBar>
-    )
+    );
 }

@@ -1,6 +1,6 @@
 import { createStore, combineReducers } from 'redux';
-import creditParams from './reducers/creditParams';
-import paymentSchedule from './reducers/paymentSchedule';
+import creditParams from 'src/reducers/creditParams';
+import paymentSchedule from 'src/reducers/paymentSchedule';
 
 const configureStore = () => {
     return createStore(

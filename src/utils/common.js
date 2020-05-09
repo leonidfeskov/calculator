@@ -7,9 +7,9 @@ export function dateFormat(date) {
     return date.toLocaleDateString('ru-RU');
 }
 
-export function calcPercent(sum, percent, date) {
+export function calcPercent(sum, percent) {
     // пока это не точный рассчет процентов. Надо делить на 365 и умножать на количество дней в месяце
-    return sum * (percent / 100) / 12;
+    return (sum * (percent / 100)) / 12;
 }
 
 export function numConversion(number, words) {

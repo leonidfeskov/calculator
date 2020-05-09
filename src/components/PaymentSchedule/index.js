@@ -6,10 +6,10 @@ import MuiTableCell from '@material-ui/core/TableCell';
 import MuiTableHead from '@material-ui/core/TableHead';
 import MuiTableRow from '@material-ui/core/TableRow';
 
-import Box from '../common/Box';
-import BoxTitle from '../common/Box/Title';
-import { priceFormat } from '../../utils/common';
-import { formatDate } from '../../utils/date';
+import Box from 'src/components/common/Box';
+import BoxTitle from 'src/components/common/Box/Title';
+import { priceFormat } from 'src/utils/common';
+import { formatDate } from 'src/utils/date';
 
 export default function PaymentSchedule() {
     const { paymentSchedule } = useSelector((state) => state);

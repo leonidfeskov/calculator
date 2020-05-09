@@ -1,11 +1,11 @@
 import React from 'react';
 import MuiTypography from '@material-ui/core/Typography';
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginBottom: theme.spacing(3)
-    }
+        marginBottom: theme.spacing(3),
+    },
 }));
 
 export default function Title(props) {

@@ -1,11 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from "@material-ui/core/styles";
-import MuiTypography from "@material-ui/core/Typography";
-import MuiDivider from "@material-ui/core/Divider";
+import { makeStyles } from '@material-ui/core/styles';
+import MuiTypography from '@material-ui/core/Typography';
+import MuiDivider from '@material-ui/core/Divider';
 
-import Box from '../Box';
-
+import Box from 'src/components/common/Box';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.primary.contrastText,
         padding: theme.spacing(2),
         borderRadius: theme.shape.borderRadius,
-        boxShadow: theme.shadows['2']
+        boxShadow: theme.shadows['2'],
     },
     iconColorSuccess: {
         backgroundColor: theme.palette.success.main,
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     footer: {
         marginTop: theme.spacing(2),
-    }
+    },
 }));
 
 export default function Summary({ icon, iconType, title, value, units, footer }) {
@@ -47,7 +46,8 @@ export default function Summary({ icon, iconType, title, value, units, footer })
     return (
         <Box>
             <div
-                className={clsx(classes.icon,
+                className={clsx(
+                    classes.icon,
                     iconType === 'success' && classes.iconColorSuccess,
                     iconType === 'warning' && classes.iconColorWarning
                 )}
@@ -55,16 +55,23 @@ export default function Summary({ icon, iconType, title, value, units, footer })
                 {icon}
             </div>
             <div className={classes.content}>
-                <MuiTypography component="h3" variant="h6" color="textSecondary">{title}</MuiTypography>
+                <MuiTypography component="h3" variant="h6" color="textSecondary">
+                    {title}
+                </MuiTypography>
                 <MuiTypography component="p" variant="h3">
                     {value}
-                    <MuiTypography component="span" variant="h5">{' '}{units}</MuiTypography>
+                    <MuiTypography component="span" variant="h5">
+                        {' '}
+                        {units}
+                    </MuiTypography>
                 </MuiTypography>
             </div>
             <MuiDivider />
             <div className={classes.footer}>
-                <MuiTypography component="p" color="textSecondary">{footer}</MuiTypography>
+                <MuiTypography component="p" color="textSecondary">
+                    {footer}
+                </MuiTypography>
             </div>
         </Box>
-    )
+    );
 }

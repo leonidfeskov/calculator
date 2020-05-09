@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button, Grid } from '@material-ui/core';
 
-import Box from '../common/Box';
-import BoxTitle from '../common/Box/Title';
-import { setCreditParams } from '../../reducers/creditParams';
-import { setPaymentSchedule } from '../../reducers/paymentSchedule';
-import calculatePayments from '../../utils/calculatePayments';
+import Box from 'src/components/common/Box';
+import BoxTitle from 'src/components/common/Box/Title';
+import { setCreditParams } from 'src/reducers/creditParams';
+import { setPaymentSchedule } from 'src/reducers/paymentSchedule';
+import calculatePayments from 'src/utils/calculatePayments';
 
 export default function CreditForm() {
     const { creditParams } = useSelector((state) => state);
@@ -18,14 +18,16 @@ export default function CreditForm() {
         const creditSum = parseFloat(elements.creditSum.value);
         const creditPercent = parseFloat(elements.creditPercent.value);
         const paymentPerMonth = parseFloat(elements.paymentPerMonth.value);
-        dispatch(setCreditParams({
-            creditSum,
-            creditPercent,
-            paymentPerMonth,
-        }));
+        dispatch(
+            setCreditParams({
+                creditSum,
+                creditPercent,
+                paymentPerMonth,
+            })
+        );
 
         const paymentSchedule = calculatePayments({ creditSum, creditPercent, paymentPerMonth });
-        dispatch(setPaymentSchedule(paymentSchedule))
+        dispatch(setPaymentSchedule(paymentSchedule));
     };
 
     return (
@@ -71,5 +73,5 @@ export default function CreditForm() {
                 </Grid>
             </form>
         </Box>
-    )
+    );
 }

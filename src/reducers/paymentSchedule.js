@@ -1,12 +1,12 @@
-import calculatePayments from '../utils/calculatePayments';
-import { initialCreditParams } from './creditParams';
+import calculatePayments from 'src/utils/calculatePayments';
+import { initialCreditParams } from 'src/reducers/creditParams';
 
 const SET_PAYMENT_SCHEDULE = 'SET_PAYMENT_SCHEDULE';
 
 export function setPaymentSchedule(data) {
     return {
         type: SET_PAYMENT_SCHEDULE,
-        data
+        data,
     };
 }
 
