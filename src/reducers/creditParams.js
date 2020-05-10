@@ -8,9 +8,9 @@ export function setCreditParams(params) {
 }
 
 export const initialCreditParams = {
-    creditSum: 1500000,
-    creditPercent: 8.8,
-    paymentPerMonth: 15036,
+    creditSum: 1000000,
+    creditPercent: 9.5,
+    paymentPerMonth: 50000,
 };
 
 export default function creditParams(state = initialCreditParams, action) {

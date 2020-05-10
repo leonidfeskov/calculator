@@ -4,6 +4,8 @@ import MuiGrid from '@material-ui/core/Grid';
 import CreditForm from '../../components/CreditForm';
 import SummaryMonthCount from '../../components/SummaryMonthCount';
 import SummaryOverpayment from '../../components/SummaryOverpayment';
+import PaymentsChart from '../../components/PaymentsChart';
+import OverpaymentChart from '../../components/OverpaymentChart';
 import PaymentSchedule from '../../components/PaymentSchedule';
 
 export default function MainPage() {
@@ -20,6 +22,16 @@ export default function MainPage() {
                 </MuiGrid>
                 <MuiGrid item xs={12} md={6} lg={6}>
                     <SummaryOverpayment />
+                </MuiGrid>
+            </MuiGrid>
+            <MuiGrid container spacing={4}>
+                <MuiGrid item xs={12}>
+                    <OverpaymentChart />
+                </MuiGrid>
+            </MuiGrid>
+            <MuiGrid container spacing={4}>
+                <MuiGrid item xs={12}>
+                    <PaymentsChart />
                 </MuiGrid>
             </MuiGrid>
             <MuiGrid container spacing={4}>
