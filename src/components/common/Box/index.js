@@ -3,6 +3,10 @@ import { Paper } from '@material-ui/core';
 
 import 'src/components/common/Box/Box.css';
 
-export default function Box({ children }) {
-    return <Paper className="box">{children}</Paper>;
+export default function Box({ children, ...props }) {
+    return (
+        <Paper className="box" {...props}>
+            {children}
+        </Paper>
+    );
 }

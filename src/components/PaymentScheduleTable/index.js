@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import MuiTable from '@material-ui/core/Table';
 import MuiTableBody from '@material-ui/core/TableBody';
@@ -15,35 +15,40 @@ import { formatDate } from 'src/utils/date';
 export default function PaymentScheduleTable() {
     const { paymentSchedule } = useSelector((state) => state);
 
-    return (
-        <Box>
-            <BoxTitle>График платежей</BoxTitle>
-            <MuiTable size="small" stickyHeader>
-                <MuiTableHead>
-                    <MuiTableRow>
-                        <MuiTableCell>№</MuiTableCell>
-                        <MuiTableCell>Дата</MuiTableCell>
-                        <MuiTableCell align="right">Платеж</MuiTableCell>
-                        <MuiTableCell align="right">По процентам</MuiTableCell>
-                        <MuiTableCell align="right">По кредиту</MuiTableCell>
-                        <MuiTableCell align="right">Переплата</MuiTableCell>
-                        <MuiTableCell align="right">Остаток долга</MuiTableCell>
-                    </MuiTableRow>
-                </MuiTableHead>
-                <MuiTableBody>
-                    {paymentSchedule.dataByMonths.map((row) => (
-                        <MuiTableRow key={row.number}>
-                            <MuiTableCell>{row.number}.</MuiTableCell>
-                            <MuiTableCell>{formatDate(row.date)}</MuiTableCell>
-                            <MuiTableCell align="right">{priceFormat(row.payment)}</MuiTableCell>
-                            <MuiTableCell align="right">{priceFormat(row.paymentByPercents)}</MuiTableCell>
-                            <MuiTableCell align="right">{priceFormat(row.paymentByCredit)}</MuiTableCell>
-                            <MuiTableCell align="right">{priceFormat(row.overpayment)}</MuiTableCell>
-                            <MuiTableCell align="right">{priceFormat(row.creditLeft)}</MuiTableCell>
-                        </MuiTableRow>
-                    ))}
-                </MuiTableBody>
-            </MuiTable>
-        </Box>
+    return useMemo(
+        () => (
+            <>
+                <BoxTitle>График платежей</BoxTitle>
+                <Box>
+                    <MuiTable size="small" stickyHeader>
+                        <MuiTableHead>
+                            <MuiTableRow>
+                                <MuiTableCell>№</MuiTableCell>
+                                <MuiTableCell>Дата</MuiTableCell>
+                                <MuiTableCell align="right">Платеж</MuiTableCell>
+                                <MuiTableCell align="right">По процентам</MuiTableCell>
+                                <MuiTableCell align="right">По кредиту</MuiTableCell>
+                                <MuiTableCell align="right">Переплата</MuiTableCell>
+                                <MuiTableCell align="right">Остаток долга</MuiTableCell>
+                            </MuiTableRow>
+                        </MuiTableHead>
+                        <MuiTableBody>
+                            {paymentSchedule.dataByMonths.map((row) => (
+                                <MuiTableRow key={row.number}>
+                                    <MuiTableCell>{row.number}.</MuiTableCell>
+                                    <MuiTableCell>{formatDate(row.date)}</MuiTableCell>
+                                    <MuiTableCell align="right">{priceFormat(row.payment)}</MuiTableCell>
+                                    <MuiTableCell align="right">{priceFormat(row.paymentByPercents)}</MuiTableCell>
+                                    <MuiTableCell align="right">{priceFormat(row.paymentByCredit)}</MuiTableCell>
+                                    <MuiTableCell align="right">{priceFormat(row.overpayment)}</MuiTableCell>
+                                    <MuiTableCell align="right">{priceFormat(row.creditLeft)}</MuiTableCell>
+                                </MuiTableRow>
+                            ))}
+                        </MuiTableBody>
+                    </MuiTable>
+                </Box>
+            </>
+        ),
+        [paymentSchedule]
     );
 }

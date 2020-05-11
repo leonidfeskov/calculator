@@ -1,10 +1,12 @@
 import { createStore, combineReducers } from 'redux';
+import credits from 'src/reducers/credits';
 import creditParams from 'src/reducers/creditParams';
 import paymentSchedule from 'src/reducers/paymentSchedule';
 
 const configureStore = () => {
     return createStore(
         combineReducers({
+            credits,
             creditParams,
             paymentSchedule,
         }),
