@@ -9,19 +9,22 @@ export default function OverpaymentChart() {
     const { paymentSchedule } = useSelector((state) => state);
 
     return (
-        <Box>
+        <>
             <BoxTitle>Диаграмма переплаты</BoxTitle>
-            <div style={{ width: '100%', height: 300 }}>
-                <ResponsiveContainer>
-                    <AreaChart data={paymentSchedule.dataByMonths}>
-                        <XAxis dataKey="dateFormatted" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Area name="Переплата" unit=" руб." dataKey="overpaymentRounded" />
-                    </AreaChart>
-                </ResponsiveContainer>
-            </div>
-        </Box>
+
+            <Box>
+                <div style={{ width: '100%', height: 300 }}>
+                    <ResponsiveContainer>
+                        <AreaChart data={paymentSchedule.dataByMonths}>
+                            <XAxis dataKey="dateFormatted" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Area name="Переплата" unit=" руб." dataKey="overpaymentRounded" />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
+            </Box>
+        </>
     );
 }
