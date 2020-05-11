@@ -1,5 +1,6 @@
 import { getNextMonth, getDaysCountInYear, getDaysCountBetweenDates, formatDate } from 'src/utils/date';
-import { roundValue } from 'src/utils/common';
+import { roundValue, calculatePercentage } from 'src/utils/common';
+import { CALCULATING_TYPE } from 'src/reducers/creditParams';
 
 const MAX_MONTHS_COUNT = 360;
 const startDate = new Date();
@@ -62,9 +63,19 @@ function calculateOnePayment(previousRow, payment, percentage) {
     return currentRow;
 }
 
-export default function calculatePayments({ creditSum, creditPercent, paymentPerMonth }) {
+export default function calculatePayments({
+    calculatingType = CALCULATING_TYPE.BY_PAYMENT,
+    creditSum,
+    creditPercent,
+    creditPeriod = 1,
+    paymentPerMonth,
+}) {
     const paymentSchedule = [];
     const percentage = creditPercent / 100;
+
+    if (calculatingType === CALCULATING_TYPE.BY_PERIOD) {
+        paymentPerMonth = calculateAnnuityPayment({ creditSum, creditPercent, creditPeriod });
+    }
 
     paymentSchedule[0] = {
         number: 0,
@@ -88,15 +99,26 @@ export default function calculatePayments({ creditSum, creditPercent, paymentPer
         monthCount += 1;
     }
 
+    const firstPaymentRow = paymentSchedule[1];
     const lastRow = paymentSchedule[paymentSchedule.length - 1];
 
     return {
         dataByMonths: paymentSchedule,
         summary: {
             overpayment: lastRow.overpayment,
-            overpaymentPercent: Math.round((lastRow.overpayment / creditSum) * 100),
-            monthCount: paymentSchedule.length,
+            overpaymentPercent: calculatePercentage(lastRow.overpayment, creditSum),
+            monthCount: paymentSchedule.length - 1, // вычитаем первую строку с датой начала кредита
             lastPaymentDate: lastRow.date,
+            payment: paymentPerMonth,
+            onPercentage: calculatePercentage(firstPaymentRow.paymentByPercents, paymentPerMonth),
         },
     };
+}
+
+function calculateAnnuityPayment({ creditSum, creditPercent, creditPeriod }) {
+    const creditPercentInMonth = creditPercent / 12 / 100;
+    const pow = Math.pow(1 + creditPercentInMonth, creditPeriod);
+    const annuityFactor = (creditPercentInMonth * pow) / (pow - 1);
+    const annuityPayment = creditSum * annuityFactor;
+    return roundValue(annuityPayment);
 }
