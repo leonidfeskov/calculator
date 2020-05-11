@@ -1,0 +1,8 @@
+.MuiTableCell-head {
+    background-color: var(--palette-primary-main);
+    color: var(--palette-primary-contrastText);
+}
+
+.MuiTableRow-root:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.04);
+}

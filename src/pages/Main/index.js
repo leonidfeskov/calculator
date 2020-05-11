@@ -6,7 +6,7 @@ import SummaryMonthCount from 'src/components/SummaryMonthCount';
 import SummaryOverpayment from 'src/components/SummaryOverpayment';
 import PaymentsChart from 'src/components/PaymentsChart';
 import OverpaymentChart from 'src/components/OverpaymentChart';
-import PaymentSchedule from 'src/components/PaymentSchedule';
+import PaymentScheduleTable from 'src/components/PaymentScheduleTable';
 
 export default function MainPage() {
     return (
@@ -36,7 +36,7 @@ export default function MainPage() {
             </MuiGrid>
             <MuiGrid container spacing={4}>
                 <MuiGrid item xs={12}>
-                    <PaymentSchedule />
+                    <PaymentScheduleTable />
                 </MuiGrid>
             </MuiGrid>
         </>

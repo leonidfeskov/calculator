@@ -1,10 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import MuiIconButton from '@material-ui/core/IconButton';
-import MuiChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import MuiMenuIcon from '@material-ui/icons/Menu';
 import MuiDivider from '@material-ui/core/Divider';
 import MuiList from '@material-ui/core/List';
 import MuiDrawer from '@material-ui/core/Drawer/Drawer';
@@ -12,70 +7,13 @@ import MuiListItem from '@material-ui/core/ListItem';
 import MuiListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import MuiListItemText from '@material-ui/core/ListItemText/ListItemText';
 
+import 'src/components/Menu/Menu.css';
 import routes from 'src/routes';
 
-const drawerWidth = 300;
-
-const useStyles = makeStyles((theme) => ({
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerPaperClose: {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-        },
-    },
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
-}));
-
 export default function Menu() {
-    const classes = useStyles();
-
-    const [open, setOpen] = useState(true);
-    const handleMenuOpen = () => {
-        setOpen(true);
-    };
-    const handleMenuClose = () => {
-        setOpen(false);
-    };
-
     return (
-        <MuiDrawer
-            variant="permanent"
-            classes={{
-                paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-            }}
-            open={open}
-        >
-            <div className={classes.toolbarIcon}>
-                {open ? (
-                    <MuiIconButton onClick={handleMenuClose}>
-                        <MuiChevronLeftIcon />
-                    </MuiIconButton>
-                ) : (
-                    <MuiIconButton onClick={handleMenuOpen}>
-                        <MuiMenuIcon />
-                    </MuiIconButton>
-                )}
-            </div>
+        <MuiDrawer variant="permanent" className="menu" open={true}>
+            <div className="menu__toolbar" />
             <MuiDivider />
             <MuiList>
                 {routes.map((route, index) => (

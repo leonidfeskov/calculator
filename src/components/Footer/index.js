@@ -4,7 +4,7 @@ import MuiBox from '@material-ui/core/Box';
 
 export default function Footer() {
     return (
-        <MuiBox mt={4}>
+        <MuiBox mt={4} mb={4}>
             <MuiTypography variant="body2" color="textSecondary" align="center">
                 {'Copyright © '}
                 Calculator {new Date().getFullYear()}

@@ -1,0 +1,37 @@
+.summary__icon {
+    --color-main: var(--palette-info-main);
+    --color-dark: var(--palette-info-dark);
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: calc(-1 * var(--spacing2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-main);
+    background-image: linear-gradient(to right, var(--color-main), var(--color-dark));
+    color: var(--palette-primary-contrastText);
+    border-radius: var(--shape-borderRadius);
+    box-shadow: var(--shadow);
+}
+
+.summary__icon_success {
+    --color-main: var(--palette-success-main);
+    --color-dark: var(--palette-success-dark);
+}
+
+.summary__icon_warning {
+    --color-main: var(--palette-warning-main);
+    --color-dark: var(--palette-warning-dark);
+}
+
+.summary__content {
+    flex-grow: 1;
+    margin-left: 100px;
+    text-align: right;
+    margin-bottom: var(--spacing2);
+}
+
+.summary__footer {
+    margin-top: var(--spacing2);
+}
