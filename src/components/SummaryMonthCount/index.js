@@ -12,7 +12,7 @@ export default function SummaryMonthCount() {
     return (
         <Summary
             title="Срок кредита"
-            icon={<MuiEventAvailableIcon fontSize="large" />}
+            icon={<MuiEventAvailableIcon />}
             value={summary.monthCount}
             units="мес."
             footer={`Последний платеж – ${formatDate(summary.lastPaymentDate)}`}

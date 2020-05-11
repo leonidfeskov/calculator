@@ -15,6 +15,10 @@
     box-shadow: var(--shadow);
 }
 
+.summary__icon .MuiSvgIcon-root {
+    font-size: 40px;
+}
+
 .summary__icon_success {
     --color-main: var(--palette-success-main);
     --color-dark: var(--palette-success-dark);
@@ -25,13 +29,18 @@
     --color-dark: var(--palette-warning-dark);
 }
 
+.summary__title {
+    margin-left: 80px;
+    margin-bottom: var(--spacing2);
+}
+
 .summary__content {
     flex-grow: 1;
-    margin-left: 100px;
     text-align: right;
     margin-bottom: var(--spacing2);
 }
 
 .summary__footer {
     margin-top: var(--spacing2);
+    height: 40px;
 }

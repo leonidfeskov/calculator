@@ -8,12 +8,14 @@ import BoxTitle from 'src/components/common/Box/Title';
 export default function OverpaymentChart() {
     const { paymentSchedule } = useSelector((state) => state);
 
+    const chartData = paymentSchedule.dataByMonths.filter((item, index) => index !== 0);
+
     return (
         <Box>
-            <BoxTitle>Диаграмма переплаты</BoxTitle>
+            <BoxTitle>График переплаты</BoxTitle>
             <div style={{ width: '100%', height: 300 }}>
                 <ResponsiveContainer>
-                    <AreaChart data={paymentSchedule.dataByMonths}>
+                    <AreaChart data={chartData}>
                         <XAxis dataKey="dateFormatted" />
                         <YAxis />
                         <Tooltip />

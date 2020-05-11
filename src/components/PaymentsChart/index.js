@@ -8,12 +8,14 @@ import BoxTitle from 'src/components/common/Box/Title';
 export default function PaymentsChart() {
     const { paymentSchedule } = useSelector((state) => state);
 
+    const chartData = paymentSchedule.dataByMonths.filter((item, index) => index !== 0);
+
     return (
         <Box>
             <BoxTitle>Распределение ежемесячного платежа</BoxTitle>
             <div style={{ width: '100%', height: 300 }}>
                 <ResponsiveContainer>
-                    <BarChart barCategoryGap="2%" data={paymentSchedule.dataByMonths}>
+                    <BarChart barCategoryGap="2%" data={chartData}>
                         <XAxis dataKey="dateFormatted" />
                         <YAxis />
                         <Tooltip />

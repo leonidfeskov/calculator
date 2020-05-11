@@ -17,9 +17,11 @@ export default function Summary({ icon, iconType, title, value, units, footer })
                 {icon}
             </div>
             <div className="summary__content">
-                <MuiTypography component="h3" variant="h6" color="textSecondary">
-                    {title}
-                </MuiTypography>
+                <div className="summary__title">
+                    <MuiTypography component="h3" variant="body1" color="textSecondary">
+                        {title}
+                    </MuiTypography>
+                </div>
                 <MuiTypography component="p" variant="h3">
                     {value}
                     <MuiTypography component="span" variant="h5">
@@ -30,7 +32,7 @@ export default function Summary({ icon, iconType, title, value, units, footer })
             </div>
             <MuiDivider />
             <div className="summary__footer">
-                <MuiTypography component="p" color="textSecondary">
+                <MuiTypography component="p" color="textSecondary" variant="body2">
                     {footer}
                 </MuiTypography>
             </div>
