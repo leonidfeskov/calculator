@@ -7,7 +7,7 @@ import MuiFormControl from '@material-ui/core/FormControl';
 
 import LargeInput from 'src/components/common/Input/LargeInput';
 
-export default function LockedInput({ label, locked, onChange, onChangeLocked, units, ...props }) {
+export default function Input({ label, onChange, units, ...props }) {
     return (
         <MuiFormControl fullWidth>
             <MuiInputLabel>{label}</MuiInputLabel>
@@ -20,8 +20,8 @@ export default function LockedInput({ label, locked, onChange, onChangeLocked, u
     );
 }
 
-LockedInput.propTypes = {
+Input.propTypes = {
     label: PropTypes.string,
-    units: PropTypes.string,
+    // units: PropTypes.string,
     onChange: PropTypes.func,
 };

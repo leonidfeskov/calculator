@@ -1,6 +1,6 @@
 export function priceFormat(value) {
     const roundedValue = Math.round(value);
-    return roundedValue.toLocaleString('ru-RU');
+    return roundedValue.toLocaleString('ru-RU').replace(/\s/g, '\u2009');
 }
 
 export function roundValue(value) {
