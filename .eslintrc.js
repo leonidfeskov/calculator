@@ -16,6 +16,7 @@ module.exports = {
         'import/extensions': ['error', 'never', { svg: 'always', less: 'always', css: 'always' }],
         'no-unused-expressions': 'off',
         'babel/no-unused-expressions': ['error', { allowShortCircuit: true }],
+        'no-console': 'off',
     },
     settings: {
         'import/resolver': {

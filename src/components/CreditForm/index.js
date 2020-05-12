@@ -1,70 +1,59 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Field } from 'react-final-form';
-import MuiButton from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
+
 import MuiGrid from '@material-ui/core/Grid';
 
 import Box from 'src/components/common/Box';
-import BoxTitle from 'src/components/common/Box/Title';
 import Input from 'src/components/common/Input';
-import { setCreditParams } from 'src/reducers/creditParams';
-import { setPaymentSchedule } from 'src/reducers/paymentSchedule';
-import calculatePayments from 'src/utils/calculatePayments';
+import { saveCredit } from 'src/reducers/credits';
 
-export default function CreditForm() {
-    const { creditParams } = useSelector((state) => state);
+export default function CreditForm({ name }) {
+    const { creditByName } = useSelector(({ credits }) => credits);
+    const creditParams = creditByName[name];
     const dispatch = useDispatch();
 
-    const onSubmit = (values) => {
-        const creditSum = parseFloat(values.creditSum);
-        const creditPercent = parseFloat(values.creditPercent);
-        const paymentPerMonth = parseFloat(values.paymentPerMonth);
-        dispatch(
-            setCreditParams({
-                creditSum,
-                creditPercent,
-                paymentPerMonth,
-            })
-        );
-        const paymentSchedule = calculatePayments({ creditSum, creditPercent, paymentPerMonth });
-        dispatch(setPaymentSchedule(paymentSchedule));
+    const onChange = (field, value) => {
+        if (creditParams.hasOwnProperty(field)) {
+            dispatch(
+                saveCredit({
+                    ...creditParams,
+                    name,
+                    [field]: value,
+                })
+            );
+        }
     };
 
     return (
-        <>
-            <BoxTitle>Параметры кредита</BoxTitle>
-            <Box>
-                <Form
-                    onSubmit={onSubmit}
-                    initialValues={creditParams}
-                    render={({ handleSubmit }) => (
-                        <form onSubmit={handleSubmit} noValidate autoComplete="off">
-                            <MuiGrid container spacing={3}>
-                                <MuiGrid item xs={12} md={3} lg={3}>
-                                    <Field name="creditSum">
-                                        {({ input }) => <Input {...input} label="Сумма кредита" />}
-                                    </Field>
-                                </MuiGrid>
-                                <MuiGrid item xs={12} md={3} lg={3}>
-                                    <Field name="creditPercent">
-                                        {({ input }) => <Input {...input} label="Процентная ставка" />}
-                                    </Field>
-                                </MuiGrid>
-                                <MuiGrid item xs={12} md={3} lg={3}>
-                                    <Field name="paymentPerMonth">
-                                        {({ input }) => <Input {...input} label="Ежемесячный платеж" />}
-                                    </Field>
-                                </MuiGrid>
-                                <MuiGrid item xs={12} md={3} lg={3}>
-                                    <MuiButton variant="contained" color="primary" fullWidth type="submit">
-                                        Рассчитать
-                                    </MuiButton>
-                                </MuiGrid>
-                            </MuiGrid>
-                        </form>
-                    )}
-                />
-            </Box>
-        </>
+        <Box>
+            <MuiGrid container spacing={3} direction="column">
+                <MuiGrid item xs={12}>
+                    <Input
+                        value={creditParams.creditSum}
+                        onChange={({ target: { value } }) => onChange('creditSum', parseFloat(value))}
+                        label="Сумма кредита"
+                    />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                    <Input
+                        value={creditParams.creditPercent}
+                        onChange={({ target: { value } }) => onChange('creditPercent', parseFloat(value))}
+                        label="Процентная ставка"
+                    />
+                </MuiGrid>
+                <MuiGrid item xs={12}>
+                    <Input
+                        value={creditParams.paymentPerMonth}
+                        onChange={({ target: { value } }) => onChange('paymentPerMonth', parseFloat(value))}
+                        label="Платёж в месяц"
+                    />
+                </MuiGrid>
+            </MuiGrid>
+        </Box>
     );
 }
+
+CreditForm.propTypes = {
+    name: PropTypes.string.isRequired,
+};

@@ -12,3 +12,17 @@ export function numConversion(number, words) {
     const textInt = number % 100 > 4 && number % 100 < 20 ? 2 : textCases[Math.min(number % 10, 5)];
     return words[textInt];
 }
+
+export function removeItem(array, item) {
+    return array.filter((current) => current !== item);
+}
+
+export function addItemIfNotExists(array, item) {
+    return array.includes(item) ? array : array.filter((current) => current !== item);
+}
+
+export function removeProperty(object, property) {
+    const result = { ...object };
+    delete result[property];
+    return result;
+}
