@@ -18,7 +18,7 @@ export function removeItem(array, item) {
 }
 
 export function addItemIfNotExists(array, item) {
-    return array.includes(item) ? array : array.filter((current) => current !== item);
+    return array.includes(item) ? array : array.concat(item);
 }
 
 export function removeProperty(object, property) {
