@@ -14,9 +14,9 @@ export function setCreditParams(params) {
 
 export const initialCreditParams = {
     calculatingType: CALCULATING_TYPE.BY_PAYMENT,
-    creditSum: 100000,
-    creditPercent: 10,
-    paymentPerMonth: 10000,
+    creditSum: 4000000,
+    creditPercent: 9.4,
+    paymentPerMonth: 100000,
     creditPeriod: 60,
 };
 

@@ -4,7 +4,7 @@ import { calculatePercentage } from 'src/calc/common';
 import { CALCULATING_TYPE } from 'src/reducers/creditParams';
 
 const MAX_MONTHS_COUNT = 360;
-const startDate = new Date('2018-08-08');
+const startDate = new Date();
 
 function addFormattedFields(row) {
     row.dateFormatted = formatDate(row.date);
@@ -31,15 +31,11 @@ class PaymentSchedule {
         creditPeriod = 1,
         paymentPerMonth,
         prepayments = [
-            {
-                date: '2018-08-10',
-                payment: 20000,
-            },
-            {
-                date: '2018-09-11',
-                payment: 5000,
-                repeat: 'everyMonth',
-            },
+            // {
+            //     date: '2020-09-11',
+            //     payment: 5000,
+            //     repeat: 'everyMonth',
+            // },
         ],
     }) {
         this.calculatingType = calculatingType;

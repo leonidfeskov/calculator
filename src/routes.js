@@ -1,18 +1,26 @@
 import React from 'react';
-import MuiDashboardIcon from '@material-ui/icons/Dashboard';
-import MuiBookmarksIcon from '@material-ui/icons/Bookmarks';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
 
 import MainPage from 'src/pages/Main';
+import DepositPage from 'src/pages/Deposit';
 import SavedCreditsPage from 'src/pages/SavedCredits';
 import CompareCreditsPage from 'src/pages/CompareCredits';
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 
 const routes = [
     {
         path: '/',
         component: MainPage(),
         title: 'Кредитный калькулятор',
-        menuIcon: <MuiDashboardIcon />,
+        menuIcon: <CreditCardIcon />,
+    },
+    {
+        path: '/deposit',
+        component: DepositPage(),
+        title: 'Калькулятор вклада',
+        menuIcon: <MonetizationOnIcon />,
     },
     {
         path: '/compare-credits',
@@ -24,7 +32,7 @@ const routes = [
         path: '/saved-credits',
         component: SavedCreditsPage(),
         title: 'Сохраненные кредиты',
-        menuIcon: <MuiBookmarksIcon />,
+        menuIcon: <BookmarksIcon />,
     },
 ];
 
