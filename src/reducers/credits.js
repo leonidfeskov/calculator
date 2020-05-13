@@ -1,5 +1,5 @@
 import { addItemIfNotExists, removeItem, removeProperty } from 'src/utils/common';
-import calculatePayments from 'src/utils/calculatePayments';
+import calculatePayments from 'src/calc/credit';
 
 const SAVE_CREDIT = 'SAVE_CREDIT';
 const LOCK_FIELD = 'LOCK_FIELD';

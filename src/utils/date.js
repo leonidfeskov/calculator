@@ -1,7 +1,9 @@
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
+export const formatDateISO = (date) => date.toISOString().substr(0, 10);
+
 export const formatDate = (date) => {
-    const strDate = date.toISOString().substr(0, 10);
+    const strDate = formatDateISO(date);
     const splittedDate = strDate.split('-');
     return `${splittedDate[2]}.${splittedDate[1]}.${splittedDate[0]}`;
 };

@@ -1,4 +1,4 @@
-import calculatePayments from 'src/utils/calculatePayments';
+import calculatePayments from 'src/calc/credit';
 import { initialCreditParams } from 'src/reducers/credits';
 
 const SET_PAYMENT_SCHEDULE = 'SET_PAYMENT_SCHEDULE';

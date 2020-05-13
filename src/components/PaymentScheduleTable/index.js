@@ -17,37 +17,39 @@ export default function PaymentScheduleTable() {
 
     return useMemo(
         () => (
-            <>
+            <Box>
                 <BoxTitle>График платежей</BoxTitle>
-                <Box>
-                    <MuiTable size="small" stickyHeader>
-                        <MuiTableHead>
-                            <MuiTableRow>
-                                <MuiTableCell>№</MuiTableCell>
-                                <MuiTableCell>Дата</MuiTableCell>
-                                <MuiTableCell align="right">Платеж</MuiTableCell>
-                                <MuiTableCell align="right">По процентам</MuiTableCell>
-                                <MuiTableCell align="right">По кредиту</MuiTableCell>
-                                <MuiTableCell align="right">Переплата</MuiTableCell>
-                                <MuiTableCell align="right">Остаток долга</MuiTableCell>
+                <MuiTable size="small" stickyHeader>
+                    <MuiTableHead>
+                        <MuiTableRow>
+                            <MuiTableCell>№</MuiTableCell>
+                            <MuiTableCell>Дата</MuiTableCell>
+                            <MuiTableCell align="right">Платеж</MuiTableCell>
+                            <MuiTableCell align="right">По процентам</MuiTableCell>
+                            <MuiTableCell align="right">По кредиту</MuiTableCell>
+                            <MuiTableCell align="right">Переплата</MuiTableCell>
+                            <MuiTableCell align="right">Остаток долга</MuiTableCell>
+                        </MuiTableRow>
+                    </MuiTableHead>
+                    <MuiTableBody>
+                        {paymentSchedule.dataByMonths.map((row) => (
+                            <MuiTableRow key={row.number}>
+                                <MuiTableCell>{row.number}.</MuiTableCell>
+                                <MuiTableCell>
+                                    {formatDate(row.date)}
+                                    &nbsp;
+                                    {row.isPrepayment && '*'}
+                                </MuiTableCell>
+                                <MuiTableCell align="right">{priceFormat(row.payment)}</MuiTableCell>
+                                <MuiTableCell align="right">{priceFormat(row.paymentByPercents)}</MuiTableCell>
+                                <MuiTableCell align="right">{priceFormat(row.paymentByCredit)}</MuiTableCell>
+                                <MuiTableCell align="right">{priceFormat(row.overpayment)}</MuiTableCell>
+                                <MuiTableCell align="right">{priceFormat(row.creditLeft)}</MuiTableCell>
                             </MuiTableRow>
-                        </MuiTableHead>
-                        <MuiTableBody>
-                            {paymentSchedule.dataByMonths.map((row) => (
-                                <MuiTableRow key={row.number}>
-                                    <MuiTableCell>{row.number}.</MuiTableCell>
-                                    <MuiTableCell>{formatDate(row.date)}</MuiTableCell>
-                                    <MuiTableCell align="right">{priceFormat(row.payment)}</MuiTableCell>
-                                    <MuiTableCell align="right">{priceFormat(row.paymentByPercents)}</MuiTableCell>
-                                    <MuiTableCell align="right">{priceFormat(row.paymentByCredit)}</MuiTableCell>
-                                    <MuiTableCell align="right">{priceFormat(row.overpayment)}</MuiTableCell>
-                                    <MuiTableCell align="right">{priceFormat(row.creditLeft)}</MuiTableCell>
-                                </MuiTableRow>
-                            ))}
-                        </MuiTableBody>
-                    </MuiTable>
-                </Box>
-            </>
+                        ))}
+                    </MuiTableBody>
+                </MuiTable>
+            </Box>
         ),
         [paymentSchedule]
     );

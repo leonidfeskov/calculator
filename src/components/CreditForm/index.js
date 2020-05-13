@@ -11,7 +11,7 @@ import Input from 'src/components/common/Input';
 import Select from 'src/components/common/Select';
 import { CALCULATING_TYPE } from 'src/reducers/creditParams';
 import { setPaymentSchedule } from 'src/reducers/paymentSchedule';
-import calculatePayments from 'src/utils/calculatePayments';
+import calculatePayments from 'src/calc/credit';
 
 export default function CreditForm() {
     const { creditParams } = useSelector((state) => state);
