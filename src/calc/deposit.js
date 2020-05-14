@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+import { calculateMoneyByPercentage } from 'src/calc/common';
 
 import { getNextMonth } from 'src/utils/date';
 
@@ -22,7 +22,12 @@ class Deposit {
             payment: this.payment,
         };
 
-        const income = (previousMonth.sum * this.percentage) / 12;
+        const income = calculateMoneyByPercentage(
+            previousMonth.sum,
+            this.percentage,
+            previousMonth.date,
+            currentMonth.date
+        );
 
         currentMonth.income = income;
         currentMonth.totalIncome = previousMonth.totalIncome + income;

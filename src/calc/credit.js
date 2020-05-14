@@ -1,6 +1,6 @@
-import { getNextMonth, getDaysCountInYear, getDaysCountBetweenDates, formatDate, formatDateISO } from 'src/utils/date';
+import { getNextMonth, formatDate, formatDateISO } from 'src/utils/date';
 import { roundValue } from 'src/utils/common';
-import { calculatePercentage } from 'src/calc/common';
+import { calculatePercentage, calculateMoneyByPercentage } from 'src/calc/common';
 import { CALCULATING_TYPE } from 'src/reducers/creditParams';
 
 const MAX_MONTHS_COUNT = 360;
@@ -110,38 +110,12 @@ class PaymentSchedule {
             isPrepayment,
         };
 
-        const daysCountInPreviousYear = getDaysCountInYear(previousPayment.date.getFullYear());
-        const daysCountInCurrentYear = getDaysCountInYear(currentPayment.date.getFullYear());
-        let paymentByPercents = 0;
-        // Случай, когда одна часть платежного периода находится в невисокосном году, а вторая в високосном или наоборот
-        // В таком случае стоимость одного дня кредита будет разной для каждой части
-        if (
-            previousPayment.date.getMonth() === 11 &&
-            currentPayment.date.getMonth() === 0 &&
-            daysCountInPreviousYear !== daysCountInCurrentYear
-        ) {
-            const daysCountInPreviousMonth = getDaysCountBetweenDates(
-                previousPayment.date,
-                new Date(`${previousPayment.date.getFullYear()}-12-31`)
-            );
-            const daysCountInCurrentMonth = getDaysCountBetweenDates(
-                new Date(`${previousPayment.date.getFullYear()}-12-31`),
-                currentPayment.date
-            );
-
-            const oneDayCreditCostForPreviousMonth =
-                (previousPayment.creditLeft * this.percentage) / daysCountInPreviousYear;
-            const oneDayCreditCostForCurrentMonth =
-                (previousPayment.creditLeft * this.percentage) / daysCountInCurrentYear;
-
-            paymentByPercents =
-                oneDayCreditCostForPreviousMonth * daysCountInPreviousMonth +
-                oneDayCreditCostForCurrentMonth * daysCountInCurrentMonth;
-        } else {
-            // обычный случай
-            const oneDayCreditCost = (previousPayment.creditLeft * this.percentage) / daysCountInPreviousYear;
-            paymentByPercents = oneDayCreditCost * getDaysCountBetweenDates(previousPayment.date, currentPayment.date);
-        }
+        const paymentByPercents = calculateMoneyByPercentage(
+            previousPayment.creditLeft,
+            this.percentage,
+            previousPayment.date,
+            currentPayment.date
+        );
 
         // последний платежный месяц
         if (previousPayment.creditLeft <= payment) {
