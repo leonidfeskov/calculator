@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MuiTable from '@material-ui/core/Table';
 import MuiTableBody from '@material-ui/core/TableBody';
@@ -11,9 +11,28 @@ import Box from 'src/components/common/Box';
 import BoxTitle from 'src/components/common/Box/Title';
 import { priceFormat } from 'src/utils/common';
 import { formatDate } from 'src/utils/date';
+import MuiGrid from '@material-ui/core/Grid';
+import MuiButton from '@material-ui/core/Button';
+
+// В первой строке нулевой платёж,
+// сдвигаем всё на 1 вперёд
+const SHIFT = 1;
+const MONTHS_PER_PAGE = 30;
 
 export default function CreditDataTable() {
     const { creditData } = useSelector((state) => state);
+
+    const [visibleRows, setVisibleRows] = useState(0);
+    useEffect(() => {
+        setVisibleRows(MONTHS_PER_PAGE);
+    }, [creditData]);
+    const rows = creditData.table.slice(SHIFT, visibleRows + SHIFT);
+    const totalRows = creditData.table.length - SHIFT;
+    const restOfRows = Math.max(totalRows - visibleRows, 0);
+    const nextRows = restOfRows < MONTHS_PER_PAGE * 1.3 ? restOfRows : MONTHS_PER_PAGE;
+    const showMoreRows = useCallback(() => {
+        setVisibleRows(visibleRows + nextRows);
+    }, [nextRows, visibleRows]);
 
     return useMemo(
         () => (
@@ -32,7 +51,7 @@ export default function CreditDataTable() {
                         </MuiTableRow>
                     </MuiTableHead>
                     <MuiTableBody>
-                        {creditData.table.map((row) => (
+                        {rows.map((row) => (
                             <MuiTableRow key={row.number}>
                                 <MuiTableCell>{row.number}.</MuiTableCell>
                                 <MuiTableCell>
@@ -49,8 +68,13 @@ export default function CreditDataTable() {
                         ))}
                     </MuiTableBody>
                 </MuiTable>
+                {nextRows ? (
+                    <MuiGrid item xs={12} onClick={showMoreRows}>
+                        <MuiButton color="primary">{`Показать ещё ${nextRows}`}</MuiButton>
+                    </MuiGrid>
+                ) : null}
             </Box>
         ),
-        [creditData]
+        [nextRows, rows, showMoreRows]
     );
 }

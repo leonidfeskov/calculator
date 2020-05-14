@@ -12,12 +12,10 @@ import configureStore from 'src/store';
 const store = configureStore();
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <App />
-            </MuiPickersUtilsProvider>
-        </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <App />
+        </MuiPickersUtilsProvider>
+    </Provider>,
     document.getElementById('root')
 );

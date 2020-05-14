@@ -9,6 +9,7 @@ import MuiTypography from '@material-ui/core/Typography';
 
 import Box from 'src/components/common/Box';
 import NumberInput from 'src/components/common/Input/NumberInput';
+import Wtf from 'src/components/common/Wtf';
 import { saveCredit, setActive } from 'src/reducers/credits';
 import { setCreditData } from 'src/reducers/creditData';
 import { numConversion, priceFormat } from 'src/utils/common';
@@ -48,7 +49,7 @@ export default function CreditForm({ name }) {
                 <MuiGrid container spacing={3} direction="column">
                     <MuiGrid item xs={12}>
                         <NumberInput
-                            value={creditParams.creditPercent}
+                            value={String(creditParams.creditPercent)}
                             onChange={(value) => onChange('creditPercent', value)}
                             label="Процентная ставка"
                             units="%"
@@ -61,7 +62,7 @@ export default function CreditForm({ name }) {
                     </MuiGrid>
                     <MuiGrid item xs={12}>
                         <NumberInput
-                            value={creditParams.creditSum}
+                            value={String(creditParams.creditSum)}
                             onChange={(value) => onChange('creditSum', value)}
                             label="Сумма кредита"
                             units="₽"
@@ -73,7 +74,7 @@ export default function CreditForm({ name }) {
                     </MuiGrid>
                     <MuiGrid item xs={12}>
                         <NumberInput
-                            value={creditParams.paymentPerMonth}
+                            value={String(creditParams.paymentPerMonth)}
                             onChange={(value) => onChange('paymentPerMonth', value)}
                             label="Платёж в месяц"
                             units="₽"
@@ -87,24 +88,44 @@ export default function CreditForm({ name }) {
                         <MuiTypography component="h3" variant="subtitle1" color="textSecondary">
                             Срок кредита
                         </MuiTypography>
-                        <MuiTypography component="span" variant="h4">
-                            {creditSchedule.summary.monthCount}&thinsp;
-                        </MuiTypography>
-                        <MuiTypography component="span" variant="h5">
-                            {numConversion(creditSchedule.summary.monthCount, ['месяц', 'месяца', 'месяцев'])}
-                        </MuiTypography>
+                        {creditSchedule.error ? (
+                            <MuiTypography component="span" variant="h4">
+                                <MuiTypography component="span" variant="h5">
+                                    Ошибка <Wtf>{creditSchedule.error}</Wtf>
+                                </MuiTypography>
+                            </MuiTypography>
+                        ) : (
+                            <>
+                                <MuiTypography component="span" variant="h4">
+                                    {creditSchedule.summary.monthCount}&thinsp;
+                                </MuiTypography>
+                                <MuiTypography component="span" variant="h5">
+                                    {numConversion(creditSchedule.summary.monthCount, ['месяц', 'месяца', 'месяцев'])}
+                                </MuiTypography>
+                            </>
+                        )}
                     </MuiGrid>
                     <MuiGrid item xs={12}>
                         <MuiBox mt={-2}>
                             <MuiTypography component="h3" variant="subtitle1" color="textSecondary">
                                 Переплата
                             </MuiTypography>
-                            <MuiTypography component="span" variant="h4">
-                                {priceFormat(creditSchedule.summary.overpayment)}&thinsp;
-                            </MuiTypography>
-                            <MuiTypography component="span" variant="h5">
-                                ₽
-                            </MuiTypography>
+                            {creditSchedule.error ? (
+                                <MuiTypography component="span" variant="h4">
+                                    <MuiTypography component="span" variant="h5">
+                                        Ошибка <Wtf>{creditSchedule.error}</Wtf>
+                                    </MuiTypography>
+                                </MuiTypography>
+                            ) : (
+                                <>
+                                    <MuiTypography component="span" variant="h4">
+                                        {priceFormat(creditSchedule.summary.overpayment)}&thinsp;
+                                    </MuiTypography>
+                                    <MuiTypography component="span" variant="h5">
+                                        ₽
+                                    </MuiTypography>
+                                </>
+                            )}
                         </MuiBox>
                     </MuiGrid>
                     <MuiGrid item xs={12}>

@@ -5,6 +5,8 @@ import { CALCULATING_TYPE, PREPAYMENT_REPEAT } from 'src/reducers/creditParams';
 
 const MAX_MONTHS_COUNT = 360;
 const startDate = normalizeDate(new Date());
+const ERROR_SUM_INCREASED = 'Невозможно взять такой кредит, проценты больше минимального платежа.';
+const ERROR_TOO_LONG = 'Невозможно взять кредит более чем на 30 лет';
 
 function addFormattedFields(row) {
     row.dateFormatted = formatDate(row.date);
@@ -45,10 +47,11 @@ class Credit {
         this.monthCount = 0;
         this.currentPaymentDate = new Date(startDate);
         this.nextPaymentDate = getNextMonth(this.currentPaymentDate);
+        this.error = false;
     }
 
     checkCreditEnd() {
-        return this.creditLeft <= 0 || this.monthCount > MAX_MONTHS_COUNT;
+        return this.creditLeft <= 0;
     }
 
     makePrepayments() {
@@ -160,10 +163,19 @@ class Credit {
             if (this.checkCreditEnd()) {
                 break;
             }
+            if (this.creditLeft > this.creditSum) {
+                this.error = ERROR_SUM_INCREASED;
+                break;
+            }
+
             this.calculateSomePayment(this.nextPaymentDate, this.payment);
             this.monthCount += 1;
             this.currentPaymentDate = new Date(this.nextPaymentDate);
             this.nextPaymentDate = getNextMonth(this.nextPaymentDate);
+            if (this.monthCount >= MAX_MONTHS_COUNT) {
+                this.error = ERROR_TOO_LONG;
+                break;
+            }
         }
 
         const firstPayment = this.creditData[1];
@@ -179,6 +191,7 @@ class Credit {
                 payment: this.payment,
                 onPercentage: calculatePercentage(firstPayment.paymentByPercents, this.payment),
             },
+            error: this.error,
         };
     }
 }

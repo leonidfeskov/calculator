@@ -24,16 +24,18 @@ export default function MultiCreditForm() {
     return (
         <MuiBox mb={2}>
             <BoxTitle>Параметры кредита</BoxTitle>
-            <MuiGrid container xs={12} spacing={3}>
-                {names.map((name) => (
+            <MuiGrid item xs={12}>
+                <MuiGrid container spacing={3}>
+                    {names.map((name) => (
+                        <MuiGrid key={name} item xs={12} md={3} lg={3}>
+                            <CreditForm name={name} />
+                        </MuiGrid>
+                    ))}
                     <MuiGrid key={name} item xs={12} md={3} lg={3}>
-                        <CreditForm name={name} />
+                        <MuiIconButton aria-label={`Добавить кредит`} onClick={addOneMoreCredit}>
+                            <AddCircleIcon fontSize="large" style={{ fontSize: 50 }} color="primary" />
+                        </MuiIconButton>
                     </MuiGrid>
-                ))}
-                <MuiGrid key={name} item xs={12} md={3} lg={3}>
-                    <MuiIconButton aria-label={`Добавить кредит`} onClick={addOneMoreCredit}>
-                        <AddCircleIcon fontSize="large" style={{ fontSize: 50 }} color="primary" />
-                    </MuiIconButton>
                 </MuiGrid>
             </MuiGrid>
         </MuiBox>
