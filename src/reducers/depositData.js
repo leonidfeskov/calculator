@@ -12,7 +12,7 @@ export function setDepositData(data) {
 
 const initialState = calculateDeposit(initialDepositParams);
 
-export default function paymentSchedule(state = initialState, action) {
+export default function depositData(state = initialState, action) {
     switch (action.type) {
         case SET_DEPOSIT_DATA:
             return action.data;

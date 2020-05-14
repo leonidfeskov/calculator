@@ -6,14 +6,14 @@ import MuiTableCell from '@material-ui/core/TableCell';
 import MuiTableHead from '@material-ui/core/TableHead';
 import MuiTableRow from '@material-ui/core/TableRow';
 
-import 'src/components/PaymentScheduleTable/PaymentScheduleTable.css';
+import 'src/components/CreditDataTable/CreditDataTable.css';
 import Box from 'src/components/common/Box';
 import BoxTitle from 'src/components/common/Box/Title';
 import { priceFormat } from 'src/utils/common';
 import { formatDate } from 'src/utils/date';
 
-export default function PaymentScheduleTable() {
-    const { paymentSchedule } = useSelector((state) => state);
+export default function CreditDataTable() {
+    const { creditData } = useSelector((state) => state);
 
     return useMemo(
         () => (
@@ -32,7 +32,7 @@ export default function PaymentScheduleTable() {
                         </MuiTableRow>
                     </MuiTableHead>
                     <MuiTableBody>
-                        {paymentSchedule.dataByMonths.map((row) => (
+                        {creditData.table.map((row) => (
                             <MuiTableRow key={row.number}>
                                 <MuiTableCell>{row.number}.</MuiTableCell>
                                 <MuiTableCell>
@@ -51,6 +51,6 @@ export default function PaymentScheduleTable() {
                 </MuiTable>
             </Box>
         ),
-        [paymentSchedule]
+        [creditData]
     );
 }

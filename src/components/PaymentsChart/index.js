@@ -6,9 +6,9 @@ import Box from 'src/components/common/Box';
 import BoxTitle from 'src/components/common/Box/Title';
 
 export default function PaymentsChart() {
-    const { paymentSchedule } = useSelector((state) => state);
+    const { creditData } = useSelector((state) => state);
 
-    const chartData = paymentSchedule.dataByMonths.filter((item, index) => index !== 0);
+    const chartData = creditData.table.filter((item, index) => index !== 0);
 
     return (
         <>

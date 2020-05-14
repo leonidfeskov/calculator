@@ -2,9 +2,8 @@ import React from 'react';
 import MuiGrid from '@material-ui/core/Grid';
 
 import MultiCreditForm from 'src/components/MultiCreditForm';
-import SummaryMonthCount from 'src/components/SummaryMonthCount';
-import SummaryOverpayment from 'src/components/SummaryOverpayment';
-import PaymentScheduleTable from 'src/components/PaymentScheduleTable';
+import CreditSummary from 'src/components/CreditSummary';
+import CreditDataTable from 'src/components/CreditDataTable';
 
 export default function MainPage() {
     return (
@@ -14,17 +13,10 @@ export default function MainPage() {
                     <MultiCreditForm />
                 </MuiGrid>
             </MuiGrid>
-            <MuiGrid container spacing={4}>
-                <MuiGrid item xs={12} md={6} lg={6}>
-                    <SummaryMonthCount />
-                </MuiGrid>
-                <MuiGrid item xs={12} md={6} lg={6}>
-                    <SummaryOverpayment />
-                </MuiGrid>
-            </MuiGrid>
+            <CreditSummary />
             <MuiGrid container spacing={4}>
                 <MuiGrid item xs={12}>
-                    <PaymentScheduleTable />
+                    <CreditDataTable />
                 </MuiGrid>
             </MuiGrid>
         </>

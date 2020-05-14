@@ -1,20 +1,20 @@
 import calculatePayments from 'src/calc/credit';
 import { initialCreditParams } from 'src/reducers/credits';
 
-const SET_PAYMENT_SCHEDULE = 'SET_PAYMENT_SCHEDULE';
+const SET_CREDIT_DATA = 'SET_CREDIT_DATA';
 
-export function setPaymentSchedule(data) {
+export function setCreditData(data) {
     return {
-        type: SET_PAYMENT_SCHEDULE,
+        type: SET_CREDIT_DATA,
         data,
     };
 }
 
 const initialState = calculatePayments(initialCreditParams);
 
-export default function paymentSchedule(state = initialState, action) {
+export default function creditData(state = initialState, action) {
     switch (action.type) {
-        case SET_PAYMENT_SCHEDULE:
+        case SET_CREDIT_DATA:
             return action.data;
         default:
             return state;

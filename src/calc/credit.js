@@ -23,7 +23,7 @@ function calculateAnnuityPayment(sum, percentage, period) {
     return roundValue(annuityPayment);
 }
 
-class PaymentSchedule {
+class Credit {
     constructor({
         calculatingType = CALCULATING_TYPE.BY_PAYMENT,
         creditSum,
@@ -45,7 +45,7 @@ class PaymentSchedule {
         this.payment = paymentPerMonth;
         this.prepayments = prepayments.sort((a, b) => (a.date > b.date ? 1 : -1));
 
-        this.paymentSchedule = [];
+        this.creditData = [];
         this.creditLeft = creditSum;
 
         this.monthCount = 0;
@@ -102,7 +102,7 @@ class PaymentSchedule {
     }
 
     calculateSomePayment(date, payment, isPrepayment) {
-        const previousPayment = this.paymentSchedule[this.paymentSchedule.length - 1];
+        const previousPayment = this.creditData[this.creditData.length - 1];
         const currentPayment = {
             number: previousPayment.number + 1,
             date,
@@ -130,7 +130,7 @@ class PaymentSchedule {
         currentPayment.creditLeft = previousPayment.creditLeft - paymentByCredit;
 
         addFormattedFields(currentPayment);
-        this.paymentSchedule.push(currentPayment);
+        this.creditData.push(currentPayment);
         this.creditLeft = currentPayment.creditLeft;
     }
 
@@ -139,7 +139,7 @@ class PaymentSchedule {
             this.payment = calculateAnnuityPayment(this.creditSum, this.percentage, this.period);
         }
 
-        this.paymentSchedule[0] = {
+        this.creditData[0] = {
             number: 0,
             date: startDate,
             payment: 0,
@@ -149,7 +149,7 @@ class PaymentSchedule {
             creditLeft: this.creditSum,
         };
 
-        addFormattedFields(this.paymentSchedule[0]);
+        addFormattedFields(this.creditData[0]);
 
         while (!this.checkCreditEnd()) {
             this.makePrepayments();
@@ -162,11 +162,11 @@ class PaymentSchedule {
             this.nextPaymentDate = getNextMonth(this.nextPaymentDate);
         }
 
-        const firstPayment = this.paymentSchedule[1];
-        const lastPayment = this.paymentSchedule[this.paymentSchedule.length - 1];
+        const firstPayment = this.creditData[1];
+        const lastPayment = this.creditData[this.creditData.length - 1];
 
         return {
-            dataByMonths: this.paymentSchedule,
+            table: this.creditData,
             summary: {
                 overpayment: lastPayment.overpayment,
                 overpaymentPercent: calculatePercentage(lastPayment.overpayment, this.creditSum),
@@ -179,7 +179,7 @@ class PaymentSchedule {
     }
 }
 
-export default function calculatePayments(params) {
-    const schedule = new PaymentSchedule(params);
-    return schedule.calculate();
+export default function calculateCredit(params) {
+    const credit = new Credit(params);
+    return credit.calculate();
 }

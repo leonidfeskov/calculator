@@ -10,7 +10,7 @@ import MuiTypography from '@material-ui/core/Typography';
 import Box from 'src/components/common/Box';
 import NumberInput from 'src/components/common/Input/NumberInput';
 import { saveCredit, setActive } from 'src/reducers/credits';
-import { setPaymentSchedule } from 'src/reducers/paymentSchedule';
+import { setCreditData } from 'src/reducers/creditData';
 import { numConversion, priceFormat } from 'src/utils/common';
 
 export default function CreditForm({ name }) {
@@ -39,7 +39,7 @@ export default function CreditForm({ name }) {
     const onSubmit = (event) => {
         event.preventDefault();
         dispatch(setActive({ name: creditParams.name }));
-        dispatch(setPaymentSchedule(scheduleByName[creditParams.name]));
+        dispatch(setCreditData(scheduleByName[creditParams.name]));
     };
 
     return (
