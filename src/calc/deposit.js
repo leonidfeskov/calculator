@@ -17,6 +17,7 @@ class Deposit {
     calculateSomePayment() {
         const previousMonth = this.depositeDate[this.depositeDate.length - 1];
         const currentMonth = {
+            number: previousMonth.number + 1,
             date: getNextMonth(previousMonth.date),
             payment: this.payment,
         };
@@ -24,6 +25,7 @@ class Deposit {
         const income = (previousMonth.sum * this.percentage) / 12;
 
         currentMonth.income = income;
+        currentMonth.totalIncome = previousMonth.totalIncome + income;
         currentMonth.sum = previousMonth.sum + income + this.payment;
 
         this.depositeDate.push(currentMonth);
@@ -31,9 +33,11 @@ class Deposit {
 
     calculate() {
         this.depositeDate[0] = {
+            number: 0,
             date: startDate,
             sum: this.sum,
             income: 0,
+            totalIncome: 0,
             payment: 0,
         };
 
@@ -42,7 +46,17 @@ class Deposit {
             this.period -= 1;
         }
 
-        return this.depositeDate;
+        const lastPayment = this.depositeDate[this.depositeDate.length - 1];
+
+        return {
+            table: this.depositeDate,
+            summary: {
+                period: this.depositeDate.length - 1,
+                endDate: lastPayment.date,
+                totalIncome: lastPayment.totalIncome,
+                totalSum: lastPayment.sum,
+            },
+        };
     }
 }
 

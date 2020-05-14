@@ -5,8 +5,8 @@ import CreditForm from 'src/components/CreditForm';
 import SummaryMonthCount from 'src/components/SummaryMonthCount';
 import SummaryPayment from 'src/components/SummaryPayment';
 import SummaryOverpayment from 'src/components/SummaryOverpayment';
-import PaymentsChart from 'src/components/PaymentsChart';
-import OverpaymentChart from 'src/components/OverpaymentChart';
+// import PaymentsChart from 'src/components/PaymentsChart';
+// import OverpaymentChart from 'src/components/OverpaymentChart';
 import PaymentScheduleTable from 'src/components/PaymentScheduleTable';
 
 export default function MainPage() {
@@ -28,16 +28,16 @@ export default function MainPage() {
                     <SummaryOverpayment />
                 </MuiGrid>
             </MuiGrid>
-            <MuiGrid container spacing={4}>
-                <MuiGrid item xs={12}>
-                    <OverpaymentChart />
-                </MuiGrid>
-            </MuiGrid>
-            <MuiGrid container spacing={4}>
-                <MuiGrid item xs={12}>
-                    <PaymentsChart />
-                </MuiGrid>
-            </MuiGrid>
+            {/* <MuiGrid container spacing={4}>*/}
+            {/*    <MuiGrid item xs={12}>*/}
+            {/*        <OverpaymentChart />*/}
+            {/*    </MuiGrid>*/}
+            {/* </MuiGrid>*/}
+            {/* <MuiGrid container spacing={4}>*/}
+            {/*    <MuiGrid item xs={12}>*/}
+            {/*        <PaymentsChart />*/}
+            {/*    </MuiGrid>*/}
+            {/* </MuiGrid>*/}
             <MuiGrid container spacing={4}>
                 <MuiGrid item xs={12}>
                     <PaymentScheduleTable />
