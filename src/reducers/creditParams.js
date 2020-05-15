@@ -14,10 +14,17 @@ export function setCreditParams(params) {
 
 export const initialCreditParams = {
     calculatingType: CALCULATING_TYPE.BY_PAYMENT,
-    creditSum: 4000000,
-    creditPercent: 9.4,
-    paymentPerMonth: 100000,
+    creditSum: 200000,
+    creditPercent: 10,
+    paymentPerMonth: 10000,
     creditPeriod: 60,
+    prepayments: [
+        {
+            date: '2020-06-15',
+            payment: 5000,
+            repeat: 'everyMonth',
+        },
+    ],
 };
 
 export default function creditParams(state = initialCreditParams, action) {

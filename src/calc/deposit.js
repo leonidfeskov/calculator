@@ -1,8 +1,8 @@
 import { calculateMoneyByPercentage } from 'src/calc/common';
 
-import { getNextMonth } from 'src/utils/date';
+import { normalizeDate, getNextMonth } from 'src/utils/date';
 
-const startDate = new Date();
+const startDate = normalizeDate(new Date());
 
 class Deposit {
     constructor({ initialSum, percentage, payment, period }) {

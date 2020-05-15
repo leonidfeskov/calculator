@@ -1,5 +1,12 @@
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
+// возвращает объект даты с установленным временем 00:00:00
+export const normalizeDate = (date) => {
+    const resultDate = new Date(date);
+    resultDate.setUTCHours(0, 0, 0, 0);
+    return resultDate;
+};
+
 export const formatDateISO = (date) => date.toISOString().substr(0, 10);
 
 export const formatDate = (date) => {

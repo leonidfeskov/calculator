@@ -1,5 +1,5 @@
 import calculatePayments from 'src/calc/credit';
-import { initialCreditParams } from 'src/reducers/credits';
+import { initialCreditParams } from 'src/reducers/creditParams';
 
 const SET_CREDIT_DATA = 'SET_CREDIT_DATA';
 

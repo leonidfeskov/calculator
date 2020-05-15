@@ -1,10 +1,10 @@
-import { getNextMonth, formatDate, formatDateISO } from 'src/utils/date';
+import { normalizeDate, getNextMonth, formatDate, formatDateISO } from 'src/utils/date';
 import { roundValue } from 'src/utils/common';
 import { calculatePercentage, calculateMoneyByPercentage } from 'src/calc/common';
 import { CALCULATING_TYPE } from 'src/reducers/creditParams';
 
 const MAX_MONTHS_COUNT = 360;
-const startDate = new Date();
+const startDate = normalizeDate(new Date());
 
 function addFormattedFields(row) {
     row.dateFormatted = formatDate(row.date);
@@ -30,13 +30,7 @@ class Credit {
         creditPercent,
         creditPeriod = 1,
         paymentPerMonth,
-        prepayments = [
-            // {
-            //     date: '2020-09-11',
-            //     payment: 5000,
-            //     repeat: 'everyMonth',
-            // },
-        ],
+        prepayments = [],
     }) {
         this.calculatingType = calculatingType;
         this.creditSum = creditSum;
@@ -60,29 +54,40 @@ class Credit {
     makePrepayments() {
         const currentPaymentDate = formatDateISO(this.currentPaymentDate);
         const nextPaymentDate = formatDateISO(this.nextPaymentDate);
-        // находим досрочные платежи, которые нужно учесть между платежными датами по графику платежей
+        console.log(currentPaymentDate, nextPaymentDate);
+
+        // досрочные платежи, которые нужно учесть между платежными датами по графику платежей
         const currentPrepayments = this.prepayments.filter((prepayment) => {
-            return currentPaymentDate <= prepayment.date && prepayment.date < nextPaymentDate && !prepayment.repeat;
+            return currentPaymentDate <= prepayment.date && prepayment.date < nextPaymentDate;
         });
 
+        // периодичные досрочные платежи, которые нужно учесть между платежными датами по графику платежей
         const prepaymentEveryMonth = this.prepayments.find((prepayment) => {
-            return prepayment.repeat === 'everyMonth' && prepayment.date < nextPaymentDate;
+            return (
+                prepayment.repeat === 'everyMonth' &&
+                prepayment.date < nextPaymentDate &&
+                !(currentPaymentDate <= prepayment.date && prepayment.date < nextPaymentDate)
+            );
         });
 
         // добавляем в список текущих досрочных платежей периодичные досрочные платежи
         if (prepaymentEveryMonth) {
             let nextRepeatedDate;
-            const date = new Date(prepaymentEveryMonth.date);
+            const date = normalizeDate(new Date(prepaymentEveryMonth.date));
             const day = date.getDate();
 
-            if (day > this.currentPaymentDate.getDate()) {
+            if (day >= this.currentPaymentDate.getDate()) {
                 nextRepeatedDate = new Date(
                     this.currentPaymentDate.getFullYear(),
                     this.currentPaymentDate.getMonth(),
-                    day
+                    day + 1
                 );
             } else {
-                nextRepeatedDate = new Date(this.nextPaymentDate.getFullYear(), this.nextPaymentDate.getMonth(), day);
+                nextRepeatedDate = new Date(
+                    this.nextPaymentDate.getFullYear(),
+                    this.nextPaymentDate.getMonth(),
+                    day + 1
+                );
             }
 
             const prepayment = {
@@ -94,7 +99,7 @@ class Credit {
 
         for (let i = 0; i < currentPrepayments.length; i++) {
             const { date, payment } = currentPrepayments[i];
-            this.calculateSomePayment(new Date(date), payment, true);
+            this.calculateSomePayment(normalizeDate(date), payment, true);
             if (this.checkCreditEnd()) {
                 break;
             }

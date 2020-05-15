@@ -23,12 +23,21 @@ export default function CreditForm() {
         const paymentPerMonth = parseFloat(values.paymentPerMonth);
         const creditPeriod = parseFloat(values.creditPeriod);
 
+        const prepayments = [
+            {
+                date: values.prepaymentDate,
+                payment: parseFloat(values.prepaymentPayment),
+                repeat: values.prepaymentRepeat,
+            },
+        ];
+
         const creditData = calculateCredit({
             calculatingType: values.calculatingType,
             creditSum,
             creditPercent,
             paymentPerMonth,
             creditPeriod,
+            prepayments,
         });
         dispatch(setCreditData(creditData));
     };
@@ -78,6 +87,33 @@ export default function CreditForm() {
                                             {({ input }) => <Input {...input} label="Срок кредита, мес." />}
                                         </Field>
                                     )}
+                                </MuiGrid>
+                            </MuiGrid>
+                            <MuiGrid container spacing={3}>
+                                <MuiGrid item xs={12} md={12} lg={12}>
+                                    Досрочное погашение
+                                </MuiGrid>
+                            </MuiGrid>
+                            <MuiGrid container spacing={3}>
+                                <MuiGrid item xs={12} md={3} lg={3}>
+                                    <Field name="prepaymentDate">
+                                        {({ input }) => <Input {...input} label="Дата" />}
+                                    </Field>
+                                </MuiGrid>
+                                <MuiGrid item xs={12} md={3} lg={3}>
+                                    <Field name="prepaymentPayment">
+                                        {({ input }) => <Input {...input} label="Платеж, руб." />}
+                                    </Field>
+                                </MuiGrid>
+                                <MuiGrid item xs={12} md={3} lg={3}>
+                                    <Field name="prepaymentRepeat">
+                                        {({ input }) => (
+                                            <Select {...input} label="Периодичность">
+                                                <MuiMenuItem value="everyMonth">раз в месяц</MuiMenuItem>
+                                                <MuiMenuItem value="none">один раз</MuiMenuItem>
+                                            </Select>
+                                        )}
+                                    </Field>
                                 </MuiGrid>
                             </MuiGrid>
                             <MuiGrid container justify="flex-end" spacing={3}>
