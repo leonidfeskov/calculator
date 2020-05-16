@@ -54,7 +54,6 @@ class Credit {
     makePrepayments() {
         const currentPaymentDate = formatDateISO(this.currentPaymentDate);
         const nextPaymentDate = formatDateISO(this.nextPaymentDate);
-        console.log(currentPaymentDate, nextPaymentDate);
 
         // досрочные платежи, которые нужно учесть между платежными датами по графику платежей
         const currentPrepayments = this.prepayments.filter((prepayment) => {
