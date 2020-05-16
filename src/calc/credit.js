@@ -20,7 +20,7 @@ function calculateAnnuityPayment(sum, percentage, period) {
     const pow = Math.pow(1 + percentageInMonth, period);
     const annuityFactor = (percentageInMonth * pow) / (pow - 1);
     const annuityPayment = sum * annuityFactor;
-    return roundValue(annuityPayment);
+    return Math.ceil(annuityPayment);
 }
 
 class Credit {
