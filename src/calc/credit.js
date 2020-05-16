@@ -1,7 +1,7 @@
 import { normalizeDate, getNextMonth, formatDate, formatDateISO } from 'src/utils/date';
 import { roundValue } from 'src/utils/common';
 import { calculatePercentage, calculateMoneyByPercentage } from 'src/calc/common';
-import { CALCULATING_TYPE } from 'src/reducers/creditParams';
+import { CALCULATING_TYPE, PREPAYMENT_REPEAT } from 'src/reducers/creditParams';
 
 const MAX_MONTHS_COUNT = 360;
 const startDate = normalizeDate(new Date());
@@ -63,7 +63,7 @@ class Credit {
         // периодичные досрочные платежи, которые нужно учесть между платежными датами по графику платежей
         const prepaymentEveryMonth = this.prepayments.find((prepayment) => {
             return (
-                prepayment.repeat === 'everyMonth' &&
+                prepayment.repeat === PREPAYMENT_REPEAT.MONTHLY.id &&
                 prepayment.date < nextPaymentDate &&
                 !(currentPaymentDate <= prepayment.date && prepayment.date < nextPaymentDate)
             );

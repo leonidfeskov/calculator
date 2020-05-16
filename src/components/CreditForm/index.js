@@ -8,6 +8,7 @@ import Box from 'src/components/common/Box';
 import BoxTitle from 'src/components/common/Box/Title';
 import Input from 'src/components/common/Input';
 import Select from 'src/components/common/Select';
+import Prepayments from 'src/components/CreditForm/Prepayments';
 import { CALCULATING_TYPE, setCreditParam } from 'src/reducers/creditParams';
 import { setCreditData } from 'src/reducers/creditData';
 import calculateCredit from 'src/calc/credit';
@@ -18,7 +19,6 @@ export default function CreditForm() {
 
     const onChange = (name, value) => {
         dispatch(setCreditParam(name, value));
-        console.log(name, value);
     };
 
     const onSubmit = (event) => {
@@ -74,31 +74,7 @@ export default function CreditForm() {
                             )}
                         </MuiGrid>
                     </MuiGrid>
-                    {/* <MuiGrid container spacing={3}>*/}
-                    {/*    <MuiGrid item xs={12} md={12} lg={12}>*/}
-                    {/*        Досрочное погашение*/}
-                    {/*    </MuiGrid>*/}
-                    {/* </MuiGrid>*/}
-                    {/* <MuiGrid container spacing={3}>*/}
-                    {/*    <MuiGrid item xs={12} md={3} lg={3}>*/}
-                    {/*        <Field name="prepaymentDate">{({ input }) => <Input {...input} label="Дата" />}</Field>*/}
-                    {/*    </MuiGrid>*/}
-                    {/*    <MuiGrid item xs={12} md={3} lg={3}>*/}
-                    {/*        <Field name="prepaymentPayment">*/}
-                    {/*            {({ input }) => <Input {...input} label="Платеж, руб." />}*/}
-                    {/*        </Field>*/}
-                    {/*    </MuiGrid>*/}
-                    {/*    <MuiGrid item xs={12} md={3} lg={3}>*/}
-                    {/*        <Field name="prepaymentRepeat">*/}
-                    {/*            {({ input }) => (*/}
-                    {/*                <Select {...input} label="Периодичность">*/}
-                    {/*                    <MuiMenuItem value="everyMonth">раз в месяц</MuiMenuItem>*/}
-                    {/*                    <MuiMenuItem value="none">один раз</MuiMenuItem>*/}
-                    {/*                </Select>*/}
-                    {/*            )}*/}
-                    {/*        </Field>*/}
-                    {/*    </MuiGrid>*/}
-                    {/* </MuiGrid>*/}
+                    <Prepayments />
                     <MuiGrid container justify="flex-end" spacing={3}>
                         <MuiGrid item xs={12} md={3} lg={3}>
                             <MuiButton variant="contained" color="primary" fullWidth type="submit" onClick={onSubmit}>
