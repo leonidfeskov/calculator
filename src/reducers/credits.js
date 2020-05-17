@@ -1,8 +1,8 @@
 import { addItemIfNotExists, removeItem, removeProperty } from 'src/utils/common';
 import calculatePayments from 'src/calc/credit';
+import { initialCreditParams } from 'src/reducers/creditParams';
 
 const SAVE_CREDIT = 'SAVE_CREDIT';
-const LOCK_FIELD = 'LOCK_FIELD';
 const ADD_CREDIT = 'ADD_CREDIT';
 const REMOVE_CREDIT = 'REMOVE_CREDIT';
 const SET_ACTIVE = 'SET_ACTIVE';
@@ -21,13 +21,6 @@ export function saveCredit(payload) {
     };
 }
 
-export function lockField({ name, field, value }) {
-    return {
-        type: LOCK_FIELD,
-        payload: { name, field, value },
-    };
-}
-
 export function setActive({ name }) {
     return {
         type: SET_ACTIVE,
@@ -35,31 +28,21 @@ export function setActive({ name }) {
     };
 }
 
-export const initialCreditParams = {
-    creditSum: 5000000,
-    creditPercent: 9.5,
-    paymentPerMonth: 50000,
-    months: null,
-    overpayment: null,
-    locked: {
-        creditSum: true,
-        creditPercent: true,
-        paymentPerMonth: true,
-        months: false,
-        overpayment: false,
-    },
-};
-
+const initialPayments = calculatePayments(initialCreditParams);
 const DEFAULT_NAME = 'default';
 
 export const initialCredits = {
     names: [DEFAULT_NAME],
     active: DEFAULT_NAME,
     creditByName: {
-        default: { ...initialCreditParams, name: DEFAULT_NAME },
+        default: {
+            ...initialCreditParams,
+            name: DEFAULT_NAME,
+            creditPeriod: initialPayments.summary.monthCount,
+        },
     },
     scheduleByName: {
-        default: calculatePayments(initialCreditParams),
+        default: initialPayments,
     },
 };
 
@@ -85,17 +68,6 @@ export default function credits(state = initialCredits, { type, payload }) {
                 creditByName: removeProperty(state.creditByName, payload.name),
                 scheduleByName: removeProperty(state.scheduleByName, payload.name),
                 active: state.active === payload.name ? null : state.active,
-            };
-        case LOCK_FIELD:
-            return {
-                ...state,
-                creditByName: {
-                    ...state.creditByName,
-                    [payload.name]: {
-                        ...state.creditByName[payload.name],
-                        locked: { ...state.creditByName[payload.name].locked, [payload.field]: payload.value },
-                    },
-                },
             };
         case SET_ACTIVE:
             return {

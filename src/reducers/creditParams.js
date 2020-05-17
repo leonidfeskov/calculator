@@ -60,9 +60,9 @@ export function setPrepaymentParam(id, name, value) {
 
 export const initialCreditParams = {
     calculatingType: CALCULATING_TYPE.BY_PAYMENT,
-    creditSum: 200000,
-    creditPercent: 10,
-    paymentPerMonth: 10000,
+    creditSum: 2000000,
+    creditPercent: 9.5,
+    paymentPerMonth: 35000,
     creditPeriod: 60,
     prepayments: [
         // {

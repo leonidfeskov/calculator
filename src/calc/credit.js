@@ -3,7 +3,7 @@ import { roundValue } from 'src/utils/common';
 import { calculatePercentage, calculateMoneyByPercentage } from 'src/calc/common';
 import { CALCULATING_TYPE, PREPAYMENT_REPEAT } from 'src/reducers/creditParams';
 
-const MAX_MONTHS_COUNT = 360;
+export const MAX_MONTHS_COUNT = 360;
 const startDate = normalizeDate(new Date());
 const ERROR_SUM_INCREASED = 'Невозможно взять такой кредит, проценты больше минимального платежа.';
 const ERROR_TOO_LONG = 'Невозможно взять кредит более чем на 30 лет';
