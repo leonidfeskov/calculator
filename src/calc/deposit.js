@@ -65,6 +65,12 @@ class Deposit {
     }
 }
 
+export function calcApproximateDepositSummary(percentage, payment, monthCount) {
+    const i = percentage / 12 / 100;
+    const sum = (payment * (Math.pow(1 + i, monthCount) - 1)) / i;
+    return Math.round(sum);
+}
+
 export default function calculateDeposit(params) {
     const deposit = new Deposit(params);
     return deposit.calculate();
