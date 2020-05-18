@@ -7,6 +7,7 @@ import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import MainPage from 'src/pages/Main';
 import DepositPage from 'src/pages/Deposit';
 import SavedCreditsPage from 'src/pages/SavedCredits';
+import CreditStrategyPage from 'src/pages/CreditStrategy';
 import CompareCreditsPage from 'src/pages/CompareCredits';
 
 const routes = [
@@ -27,6 +28,12 @@ const routes = [
         component: CompareCreditsPage(),
         title: 'Сравнение кредитов',
         menuIcon: <CompareArrowsIcon />,
+    },
+    {
+        path: '/credit-strategy',
+        component: CreditStrategyPage(),
+        title: 'Стратегии пагашения',
+        menuIcon: <BookmarksIcon />,
     },
     {
         path: '/saved-credits',

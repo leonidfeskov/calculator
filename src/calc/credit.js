@@ -1,6 +1,6 @@
 import { normalizeDate, getNextMonth, formatDate, formatDateISO } from 'src/utils/date';
 import { roundValue } from 'src/utils/common';
-import { calculatePercentage, calculateMoneyByPercentage } from 'src/calc/common';
+import { calculatePercentage, calculateMoneyByPercentage, getBaseLog } from 'src/calc/common';
 import { CALCULATING_TYPE, PREPAYMENT_REPEAT } from 'src/reducers/creditParams';
 
 export const MAX_MONTHS_COUNT = 360;
@@ -194,6 +194,16 @@ class Credit {
             error: this.error,
         };
     }
+}
+
+export function calcApproximateCreditSummary(sum, percentage, payment) {
+    const i = percentage / 12 / 100;
+    const monthCount = getBaseLog(i + 1, payment / (payment - i * sum));
+    const overpayment = payment * monthCount - sum;
+    return {
+        monthCount: Math.ceil(monthCount),
+        overpayment: Math.round(overpayment),
+    };
 }
 
 export default function calculateCredit(params) {

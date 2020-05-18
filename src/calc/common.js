@@ -5,6 +5,10 @@ export function calculatePercentage(value, base) {
     return Math.round((value / base) * 10000) / 100;
 }
 
+export function getBaseLog(x, y) {
+    return Math.log(y) / Math.log(x);
+}
+
 export function calculateMoneyByPercentage(sum, percentage, startDate, endDate) {
     const daysCountInPreviousYear = getDaysCountInYear(startDate.getFullYear());
     const daysCountInCurrentYear = getDaysCountInYear(endDate.getFullYear());
