@@ -50,14 +50,19 @@ export default function credits(state = initialCredits, { type, payload }) {
     switch (type) {
         case ADD_CREDIT:
         case SAVE_CREDIT: {
-            const creditParams = { ...payload };
+            const payments = calculatePayments(payload);
+            const creditParams = {
+                ...payload,
+                creditPeriod: payments.summary.monthCount,
+                paymentPerMonth: payments.summary.payment,
+            };
             return {
                 ...state,
                 names: addItemIfNotExists(state.names, payload.name),
                 creditByName: { ...state.creditByName, [payload.name]: creditParams },
                 scheduleByName: {
                     ...state.scheduleByName,
-                    [payload.name]: calculatePayments(creditParams),
+                    [payload.name]: payments,
                 },
             };
         }
