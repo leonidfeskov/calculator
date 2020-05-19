@@ -5,7 +5,7 @@ import { CALCULATING_TYPE, PREPAYMENT_REPEAT } from 'src/reducers/creditParams';
 
 export const MAX_MONTHS_COUNT = 360;
 const startDate = normalizeDate(new Date());
-const ERROR_SUM_INCREASED = 'Невозможно взять такой кредит, проценты больше минимального платежа.';
+// const ERROR_SUM_INCREASED = 'Невозможно взять такой кредит, проценты больше минимального платежа.';
 const ERROR_TOO_LONG = 'Невозможно взять кредит более чем на 30 лет';
 
 function addFormattedFields(row) {
@@ -117,28 +117,33 @@ class Credit {
             isPrepayment,
         };
 
-        const paymentByPercents = calculateMoneyByPercentage(
+        let debtByPercents = calculateMoneyByPercentage(
             previousPayment.creditLeft,
             this.percentage,
             previousPayment.date,
             currentPayment.date
         );
+        debtByPercents += previousPayment.debtByPercents;
 
         // последний платежный месяц
         if (previousPayment.creditLeft <= payment) {
-            currentPayment.payment = previousPayment.creditLeft + paymentByPercents;
+            currentPayment.payment = previousPayment.creditLeft + debtByPercents;
         }
 
-        const paymentByCredit = currentPayment.payment - paymentByPercents;
+        // Если совершаем досрочный платеж на сумму меньше, чем накало процентов, то погашаем часть процентов,
+        // а остальной долг по процентам запоминаем в debtByPercents, чтобы учесть при следующем платеже
+        const paymentByPercents = Math.min(currentPayment.payment, debtByPercents);
+        const paymentByCredit = Math.max(0, currentPayment.payment - paymentByPercents);
 
         currentPayment.paymentByPercents = paymentByPercents;
+        currentPayment.debtByPercents = debtByPercents - paymentByPercents;
         currentPayment.paymentByCredit = paymentByCredit;
-        currentPayment.overpayment = previousPayment.overpayment + paymentByPercents;
-        currentPayment.creditLeft = previousPayment.creditLeft - paymentByCredit;
+        currentPayment.overpayment = previousPayment.overpayment + currentPayment.paymentByPercents;
+        currentPayment.creditLeft = previousPayment.creditLeft - currentPayment.paymentByCredit;
 
         addFormattedFields(currentPayment);
-        this.creditData.push(currentPayment);
         this.creditLeft = currentPayment.creditLeft;
+        this.creditData.push(currentPayment);
     }
 
     calculate() {
@@ -151,6 +156,7 @@ class Credit {
             date: startDate,
             payment: 0,
             paymentByPercents: 0,
+            debtByPercents: 0,
             paymentByCredit: 0,
             overpayment: 0,
             creditLeft: this.creditSum,
@@ -163,12 +169,9 @@ class Credit {
             if (this.checkCreditEnd()) {
                 break;
             }
-            if (this.creditLeft > this.creditSum) {
-                this.error = ERROR_SUM_INCREASED;
-                break;
-            }
 
             this.calculateSomePayment(this.nextPaymentDate, this.payment);
+
             this.monthCount += 1;
             this.currentPaymentDate = new Date(this.nextPaymentDate);
             this.nextPaymentDate = getNextMonth(this.nextPaymentDate);
