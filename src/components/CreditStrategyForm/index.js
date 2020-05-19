@@ -5,8 +5,8 @@ import MuiGrid from '@material-ui/core/Grid';
 import Box from 'src/components/common/Box';
 import BoxTitle from 'src/components/common/Box/Title';
 import Input from 'src/components/common/Input';
-import { calcApproximateCreditSummary } from 'src/calc/credit';
-import { calcApproximateDepositSummary } from 'src/calc/deposit';
+import calculateCredit, { calcApproximateCreditSummary } from 'src/calc/credit';
+import calculateDeposit, { calcApproximateDepositSummary } from 'src/calc/deposit';
 import { priceFormat } from 'src/utils/common';
 
 export default function CreditStrategyForm() {
@@ -19,6 +19,7 @@ export default function CreditStrategyForm() {
 
     const [strategyOnlyCredit, setStrategyOnlyCredit] = useState({});
     const [strategyCreditAndDeposit, setStrategyCreditAndDeposit] = useState({});
+    const [strategyRepayCreditWithDeposit, setStrategyRepayCreditWithDeposit] = useState({});
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -36,15 +37,48 @@ export default function CreditStrategyForm() {
 
         // Стратегия 1. Все платим за кредит
         const strategy1 = calcApproximateCreditSummary(creditSum, creditPercentage, totalPayment);
-        const strategy1Deposit = calcApproximateDepositSummary(
-            depositPercentage,
-            totalPayment,
-            strategy2.monthCount - strategy1.monthCount
-        );
+        // const strategy1Deposit = calcApproximateDepositSummary(
+        //     depositPercentage,
+        //     totalPayment,
+        //     strategy2.monthCount - strategy1.monthCount
+        // );
         setStrategyOnlyCredit({
             monthCount: strategy1.monthCount,
             overpayment: strategy1.overpayment,
-            depositSum: strategy1Deposit,
+            depositSum: 0,
+        });
+
+        // Стратегия 3. Платим кредит и параллельно пополняем вклад пока его не хватит на погашение остатка по кредиту
+        const strategy3 = {
+            creditData: calculateCredit({
+                creditSum,
+                creditPercent: creditPercentage,
+                paymentPerMonth: creditPayment,
+            }),
+        };
+        strategy3.depositData = calculateDeposit({
+            initialSum: 0,
+            percentage: depositPercentage,
+            payment: depositPayment,
+            period: strategy3.creditData.summary.monthCount,
+        });
+
+        // находим месяц, в котором сумма вклада будет больше остатка по кредиту
+        let monthCount = strategy3.creditData.table.length;
+        for (let i = 0; i < strategy3.creditData.table.length; i++) {
+            if (strategy3.depositData.table[i].sum >= strategy3.creditData.table[i].creditLeft) {
+                monthCount = i;
+                break;
+            }
+        }
+
+        console.log(monthCount);
+        console.log(strategy3.creditData.table);
+
+        setStrategyRepayCreditWithDeposit({
+            monthCount,
+            overpayment: strategy3.creditData.table[monthCount].overpayment,
+            depositSum: 0,
         });
     };
 
@@ -123,6 +157,18 @@ export default function CreditStrategyForm() {
                         Переплата <b>{priceFormat(strategyCreditAndDeposit.overpayment)} руб.</b>
                         <br />
                         Сумма на вкладе в конце срока <b>{priceFormat(strategyCreditAndDeposit.depositSum)} руб.</b>
+                    </Box>
+                </MuiGrid>
+
+                <MuiGrid item xs={12} md={3} lg={3}>
+                    <BoxTitle>Кредит + погашение вкладом</BoxTitle>
+                    <Box>
+                        Скрок кредита <b>{strategyRepayCreditWithDeposit.monthCount} мес</b>.
+                        <br />
+                        Переплата <b>{priceFormat(strategyRepayCreditWithDeposit.overpayment)} руб.</b>
+                        <br />
+                        Сумма на вкладе в конце срока{' '}
+                        <b>{priceFormat(strategyRepayCreditWithDeposit.depositSum)} руб.</b>
                     </Box>
                 </MuiGrid>
             </MuiGrid>
