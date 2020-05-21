@@ -1,4 +1,4 @@
-import { normalizeDate, getNextMonth, formatDate, formatDateISO } from 'src/utils/date';
+import { normalizeDate, getNextMonth, formatDate, formatDateISO, getDateAfterXMonth } from 'src/utils/date';
 import { roundValue } from 'src/utils/common';
 import { calculatePercentage, calculateMoneyByPercentage, getBaseLog } from 'src/calc/common';
 import { CALCULATING_TYPE, PREPAYMENT_REPEAT } from 'src/reducers/creditParams';
@@ -39,7 +39,27 @@ class Credit {
         this.percentage = creditPercent / 100;
         this.period = creditPeriod;
         this.payment = paymentPerMonth;
-        this.prepayments = prepayments.sort((a, b) => (a.date > b.date ? 1 : -1));
+        this.prepayments = [];
+        prepayments.forEach((prepayment) => {
+            for (let i = 0; i < MAX_MONTHS_COUNT; i++) {
+                if (prepayment.repeat === PREPAYMENT_REPEAT.NONE.id) {
+                    this.prepayments.push(prepayment);
+                    break;
+                }
+
+                if (
+                    prepayment.repeat === PREPAYMENT_REPEAT.EVERY_MONTH.id ||
+                    (prepayment.repeat === PREPAYMENT_REPEAT.EVERY_THREE_MONTHS.id && i % 3 === 0) ||
+                    (prepayment.repeat === PREPAYMENT_REPEAT.EVERY_HALF_YEAR.id && i % 6 === 0) ||
+                    (prepayment.repeat === PREPAYMENT_REPEAT.EVERY_YEAR.id && i % 12 === 0)
+                ) {
+                    this.prepayments.push({
+                        date: getDateAfterXMonth(prepayment.date, i),
+                        payment: prepayment.payment,
+                    });
+                }
+            }
+        });
 
         this.creditData = [];
         this.creditLeft = creditSum;
@@ -64,40 +84,40 @@ class Credit {
         });
 
         // периодичные досрочные платежи, которые нужно учесть между платежными датами по графику платежей
-        const prepaymentEveryMonth = this.prepayments.find((prepayment) => {
-            return (
-                prepayment.repeat === PREPAYMENT_REPEAT.MONTHLY.id &&
-                prepayment.date < nextPaymentDate &&
-                !(currentPaymentDate <= prepayment.date && prepayment.date < nextPaymentDate)
-            );
-        });
-
-        // добавляем в список текущих досрочных платежей периодичные досрочные платежи
-        if (prepaymentEveryMonth) {
-            let nextRepeatedDate;
-            const date = normalizeDate(new Date(prepaymentEveryMonth.date));
-            const day = date.getDate();
-
-            if (day >= this.currentPaymentDate.getDate()) {
-                nextRepeatedDate = new Date(
-                    this.currentPaymentDate.getFullYear(),
-                    this.currentPaymentDate.getMonth(),
-                    day + 1
-                );
-            } else {
-                nextRepeatedDate = new Date(
-                    this.nextPaymentDate.getFullYear(),
-                    this.nextPaymentDate.getMonth(),
-                    day + 1
-                );
-            }
-
-            const prepayment = {
-                date: formatDateISO(nextRepeatedDate),
-                payment: prepaymentEveryMonth.payment,
-            };
-            currentPrepayments.push(prepayment);
-        }
+        // const prepaymentEveryMonth = this.prepayments.find((prepayment) => {
+        //     return (
+        //         prepayment.repeat === PREPAYMENT_REPEAT.EVERY_MONTH.id &&
+        //         prepayment.date < nextPaymentDate &&
+        //         !(currentPaymentDate <= prepayment.date && prepayment.date < nextPaymentDate)
+        //     );
+        // });
+        //
+        // // добавляем в список текущих досрочных платежей периодичные досрочные платежи
+        // if (prepaymentEveryMonth) {
+        //     let nextRepeatedDate;
+        //     const date = normalizeDate(new Date(prepaymentEveryMonth.date));
+        //     const day = date.getDate();
+        //
+        //     if (day >= this.currentPaymentDate.getDate()) {
+        //         nextRepeatedDate = new Date(
+        //             this.currentPaymentDate.getFullYear(),
+        //             this.currentPaymentDate.getMonth(),
+        //             day + 1
+        //         );
+        //     } else {
+        //         nextRepeatedDate = new Date(
+        //             this.nextPaymentDate.getFullYear(),
+        //             this.nextPaymentDate.getMonth(),
+        //             day + 1
+        //         );
+        //     }
+        //
+        //     const prepayment = {
+        //         date: formatDateISO(nextRepeatedDate),
+        //         payment: prepaymentEveryMonth.payment,
+        //     };
+        //     currentPrepayments.push(prepayment);
+        // }
 
         for (let i = 0; i < currentPrepayments.length; i++) {
             const { date, payment } = currentPrepayments[i];

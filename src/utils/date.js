@@ -33,3 +33,10 @@ export const getDaysCountInYear = (year) => {
 };
 
 export const getDaysCountBetweenDates = (start, end) => (end - start) / MILLISECONDS_IN_DAY;
+
+export const getDateAfterXMonth = (date, x) => {
+    const splitDate = date.split('-');
+    return formatDateISO(
+        normalizeDate(new Date(splitDate[0], parseInt(splitDate[1], 10) - 1 + x, parseInt(splitDate[2], 10)))
+    );
+};

@@ -11,13 +11,25 @@ export const CALCULATING_TYPE = {
 };
 
 export const PREPAYMENT_REPEAT = {
-    MONTHLY: {
-        id: 'monthly',
-        name: 'Раз в месяц',
-    },
     NONE: {
         id: 'none',
         name: 'один раз',
+    },
+    EVERY_MONTH: {
+        id: 'everyMonth',
+        name: 'Каждый месяц',
+    },
+    EVERY_THREE_MONTHS: {
+        id: 'everyThreeMonth',
+        name: 'Каждые 3 месяца',
+    },
+    EVERY_HALF_YEAR: {
+        id: 'everyHalfYear',
+        name: 'Каждые полгода',
+    },
+    EVERY_YEAR: {
+        id: 'everyYear',
+        name: 'Каждый год',
     },
 };
 
@@ -67,16 +79,28 @@ export const initialCreditParams = {
     prepayments: [
         // {
         //     id: '1',
-        //     date: '2020-06-15',
-        //     payment: 5000,
-        //     repeat: PREPAYMENT_REPEAT.MONTHLY.id,
-        // },
-        // {
-        //     id: '2',
         //     date: '2020-07-10',
         //     payment: 3000,
         //     repeat: PREPAYMENT_REPEAT.NONE.id,
         // },
+        // {
+        //     id: '2',
+        //     date: '2020-08-10',
+        //     payment: 3000,
+        //     repeat: PREPAYMENT_REPEAT.NONE.id,
+        // },
+        // {
+        //     id: '3',
+        //     date: '2020-06-15',
+        //     payment: 5000,
+        //     repeat: PREPAYMENT_REPEAT.EVERY_MONTH.id,
+        // },
+        {
+            id: '4',
+            date: '2020-06-17',
+            payment: 2000,
+            repeat: PREPAYMENT_REPEAT.EVERY_THREE_MONTHS.id,
+        },
     ],
 };
 
